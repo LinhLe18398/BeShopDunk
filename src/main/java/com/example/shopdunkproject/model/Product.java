@@ -2,11 +2,16 @@ package com.example.shopdunkproject.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,5 +23,6 @@ public class Product {
     private Category category;
 
     @OneToMany(mappedBy = "product")
-    Set<ProductAttribute> productAttributes;
+//    @EqualsAndHashCode.Exclude
+    List<ProductAttribute> productAttributes;
 }

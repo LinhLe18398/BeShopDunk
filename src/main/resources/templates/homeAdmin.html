@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HomeAdmin</title>
+</head>
+<body>
+<table style="border: solid 1px;height: 290px; width: 800px; text-align: center; margin-left: 302px">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Description</th>
+
+    </tr>
+    <tr th:each="row: ${listProduct}">
+        <td th:text="${row.id}"></td>
+        <td th:text="${row.name}"></td>
+        <td th:text="${row.category.name}"></td>
+        <td th:text="${row.description}"></td>
+        <td th:text="${row.getProductAttributes()}"></td>
+
+
+
+    </tr>
+</table>
+</body>
+</html>
