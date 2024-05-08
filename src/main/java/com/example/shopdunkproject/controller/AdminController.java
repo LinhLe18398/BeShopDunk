@@ -1,6 +1,6 @@
 package com.example.shopdunkproject.controller;
 
-import com.example.shopdunkproject.model.Product;
+import com.example.shopdunkproject.repository.IProductAttributeRepository;
 import com.example.shopdunkproject.repository.IProductRepository;
 import com.example.shopdunkproject.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,13 @@ public class AdminController {
     @Autowired
     private IProductRepository iProductRepository;
 
+    @Autowired
+    private IProductAttributeRepository iProductAttributeRepository;
+
     @GetMapping("/showAll")
     public ModelAndView showAllProduct(@PageableDefault(2) Pageable pageable) {
         ModelAndView modelAndView = new ModelAndView("homeAdmin");
-        Iterable<Product> products = iProductRepository.findAll(pageable);
+        modelAndView.addObject("listValue",iProductAttributeRepository.findAll());
         modelAndView.addObject("listProduct", iProductRepository.findAll(pageable));
         return modelAndView;
     }
