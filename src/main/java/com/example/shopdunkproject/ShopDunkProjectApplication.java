@@ -8,6 +8,7 @@ public class ShopDunkProjectApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ShopDunkProjectApplication.class, args);
+        System.out.println("http://localhost:8090/products");
     }
 
 }

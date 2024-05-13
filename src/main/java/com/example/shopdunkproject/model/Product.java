@@ -18,11 +18,13 @@ public class Product {
     @Column(name = "product_id")
     private long id;
     private String name;
+    private int price;
+    private String image;
     private String description;
     @ManyToOne
     private Category category;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 //    @EqualsAndHashCode.Exclude
     List<ProductAttribute> productAttributes;
 }

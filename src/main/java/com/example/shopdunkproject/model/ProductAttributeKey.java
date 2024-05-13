@@ -6,9 +6,17 @@ import java.io.Serializable;
 
 public class ProductAttributeKey implements Serializable {
     @Column(name = "product_id")
-    Long productId;
+    long productId;
 
     @Column(name = "attribute_id")
-    Long attributeId;
+    long attributeId;
+
+    public ProductAttributeKey() {
+    }
+
+    public ProductAttributeKey(long productId, long attributeId) {
+        this.productId = productId;
+        this.attributeId = attributeId;
+    }
 
 }
