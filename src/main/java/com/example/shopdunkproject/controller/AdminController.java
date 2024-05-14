@@ -12,10 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -101,9 +105,11 @@ public class AdminController {
         return pattern.matcher(strNum).matches();
     }
     @PostMapping("/save")
-    public ModelAndView createProduct(@ModelAttribute("product") Product productDto,@RequestParam Map<String, String> productAttributes) {
+    public ModelAndView createProduct(@RequestParam("file") MultipartFile file,@ModelAttribute("product") Product productDto,@RequestParam Map<String, String> productAttributes) throws IOException {
         Product product = iProductService.save(productDto);
         ModelAndView modelAndView = new ModelAndView("redirect:/products");
+        productDto.setImage(uploadImage(file));
+        iProductRepository.save(productDto);
         productAttributes.forEach((id, value) -> {
             if(!value.isEmpty() && isNumeric(id)) {
                 ProductAttribute productAttribute = new ProductAttribute();
@@ -117,6 +123,16 @@ public class AdminController {
             }
         });
         return modelAndView;
+    }
+
+    private String uploadImage(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        File uploadDir = new File(UPLOAD_DIRECTORY);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+        FileCopyUtils.copy(file.getBytes(), new File(uploadDir.getAbsolutePath() + "//" + fileName));
+        return fileName;
     }
     @GetMapping("/view/{id}")
     public ModelAndView showInfo(@PathVariable long id){

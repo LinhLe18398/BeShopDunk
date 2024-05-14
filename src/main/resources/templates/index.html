@@ -236,7 +236,7 @@
           <th scope="col">Tên</th>
           <th scope="col">Danh mục</th>
           <th scope="col">Mô tả</th>
-          <th scope="col">Thuộc tính</th>
+          <th scope="col">Ảnh</th>
           <th scope="col">Xóa</th>
           <th scope="col">Chi tiết</th>
         </tr>
@@ -247,9 +247,7 @@
           <td th:text="${product.category.name}"></td>
           <td th:text="${product.description}"></td>
           <td>
-            <div th:each="attribute : ${product.productAttributes}">
-              <p th:text="${attribute.attribute.name} + ': ' + ${attribute.value}"></p>
-            </div>
+            <img style="object-fit: contain;" width="100px" height="100px" th:src="@{'/image/' + ${product.image}}" alt="">
           </td>
           <td>
             <a class="btn btn-outline-danger" th:href="@{/products/delete/{id}(id=${product.id})}">Xóa</a>
