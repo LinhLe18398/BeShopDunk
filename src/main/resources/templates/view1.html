@@ -25,20 +25,65 @@
     <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
     <!-- summernote -->
     <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
-
     <style>
-        .content {
+        /* CSS cho kiểu dáng trang */
+        .container {
+            margin: 0 auto;
             padding: 20px;
+            max-width: 800px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
         }
-        .form-group label {
-            font-weight: bold;
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
         }
-        .btn-primary {
-            margin-top: 20px;
+
+        /* CSS cho nút */
+        .btn {
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+        }
+
+        /* CSS cho việc sắp xếp hai nút trên cùng một hàng */
+        .button-row {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f9fa;
         }
     </style>
 </head>
-
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
@@ -48,11 +93,8 @@
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
         <!-- Left navbar links -->
         <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" data-widget="" href="#" role="button"><i class="fas fa-bars"></i></a>
-            </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="/products" class="nav-link">Trang Chủ</a>
+                <a href="products" class="nav-link">Trang Chủ</a>
             </li>
         </ul>
 
@@ -182,8 +224,9 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a href="products" class="brand-link">
-            <span class="brand-text font-weight-light">Shop Dunk</span>
+        <a href="index3.html" class="brand-link">
+            <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <span class="brand-text font-weight-light">Shop Duck</span>
         </a>
 
 
@@ -214,82 +257,55 @@
             </ul>
         </nav>
     </aside>
-
-
-
-
-
-
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-12">
-                        <h1 class="m-0"></h1>
-                    </div><!-- /.col -->
-                    <div class="col-sm-12 ">
-                        <ol class="breadcrumb float-sm-right">
-                            <a class="btn btn-primary" href="/products/create">Tạo Sản Phẩm</a>
-                        </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </div>
-
         <!-- Main content -->
         <section class="content">
-            <div class="container">
-                <h1 class="mb-4" style="text-align: center">Thêm sản phẩm</h1>
+            <div class="container mt-4">
 
-                <form th:action="@{/products/save}" th:object="${product}" method="post" enctype="multipart/form-data">
+                <div class="container" >
+                    <h1>Chi tiết sản phẩm</h1>
+                    <!-- Bảng hiển thị thông tin sản phẩm -->
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Tên</th>
+                            <th>Giá</th>
+                            <th>Mô tả</th>
+                            <th>Danh mục</th>
+                            <th>Thuộc tính</th>
+                        </tr>
+                        </thead>
+                        <tbody th:object="${productDelete}">
+                        <tr>
+                            <td th:text="${productDelete.name}"></td>
+                            <td th:text="${productDelete.price}"></td>
+                            <td th:text="${productDelete.description}"></td>
+                            <td th:text="${productDelete.category.name}"></td>
+                            <td>
+                                <div th:each="attribute : ${productDelete.getProductAttributes()}">
+                                    <p th:text="${attribute.attribute.name}"></p>
+                                    <p th:text="${attribute.value}"></p>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
 
+                    <!-- Nút "Quay lại danh sách" và "Xóa" -->
+                    <div class="button-row">
+                        <!-- Nút "Quay lại danh sách" -->
+                        <form th:action="@{/products}" method="get">
+                            <input type="submit" value="Quay lại danh sách" class="btn btn-secondary">
+                        </form>
+                        <!-- Nút "Xóa" -->
 
-                    <div class="form-group">
-                        <label for="name">Tên sản phẩm:</label>
-                        <input type="text" id="name" th:field="*{name}" class="form-control">
                     </div>
-                    <div class="form-group">
-                        <label for="price">Giá Sản Phẩm:</label>
-                        <input type="text" id="price" th:field="*{price}" class="form-control">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="description">Mô tả:</label>
-                        <input type="text" id="description" th:field="*{description}" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="category">Loại sản phẩm:</label>
-                        <select id="category" th:field="*{category}" class="form-control">
-                            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-                        </select>
-                    </div>
-
-                    <!-- Loop through attributes -->
-                    <div th:each="attribute : ${attributes}" class="form-group">
-                        <label th:for="${'attributeValues[' + attribute.id + ']'}" th:text="${attribute.name}"></label>
-                        <input type="text" th:id="${'attributeValues[' + attribute.id + ']'}" th:name="${ 'productAttributes[' + attribute.id + ']' }" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="file">Ảnh:</label>
-                        <input type="file" id="file" name="file" class="form-control-file" required>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </section>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    <footer class="main-footer">
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-        All rights reserved.
-        <div class="float-right d-none d-sm-inline-block">
-            <b>Version</b> 3.2.0
-        </div>
-    </footer>
+
 
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">

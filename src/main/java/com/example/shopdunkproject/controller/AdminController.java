@@ -71,17 +71,28 @@ public class AdminController {
 //    }
 
     @GetMapping("/delete/{id}")
-    public ModelAndView showDelete(@PathVariable long id){
-        ModelAndView modelAndView = new ModelAndView("delete");
-        modelAndView.addObject("productDelete",iProductService.findById(id).get());
-        return modelAndView;
-    }
-    @PostMapping("/delete/{id}")
-    public ModelAndView deleteProduct(@PathVariable long id){
+    public ModelAndView deleteProduct(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("redirect:/products");
-        iProductService.delete(id);
+        // Tìm sản phẩm theo ID
+        Optional<Product> productOptional = iProductRepository.findById(id);
+        if (productOptional.isPresent()) {
+            // Nếu sản phẩm tồn tại, xóa sản phẩm
+            iProductService.delete(id);
+            // Bạn có thể thêm thông báo hoặc trạng thái nếu cần
+            modelAndView.addObject("message", "Sản phẩm đã được xóa thành công.");
+        } else {
+            // Xử lý nếu sản phẩm không tồn tại (nếu cần)
+            modelAndView.addObject("error", "Sản phẩm không tồn tại.");
+        }
+        // Trả về ModelAndView để chuyển hướng về trang danh sách sản phẩm
         return modelAndView;
     }
+//    @PostMapping("/delete/{id}")
+//    public ModelAndView deleteProduct(@PathVariable long id){
+//        ModelAndView modelAndView = new ModelAndView("redirect:/products");
+//        iProductService.delete(id);
+//        return modelAndView;
+//    }
     @GetMapping("/addAttributes")
     public String addProductAttributes() {
         productAttributeRepository.save(new ProductAttribute());
@@ -136,7 +147,7 @@ public class AdminController {
     }
     @GetMapping("/view/{id}")
     public ModelAndView showInfo(@PathVariable long id){
-        ModelAndView modelAndView = new ModelAndView("view");
+        ModelAndView modelAndView = new ModelAndView("view1");
         modelAndView.addObject("productDelete",iProductService.findById(id).get());
         return modelAndView;
     }

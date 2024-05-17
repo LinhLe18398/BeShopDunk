@@ -25,6 +25,20 @@
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <style>
+    /* Add this style block to adjust button colors */
+    .btn-outline-danger {
+      color: #dc3545;
+      border-color: #dc3545;
+    }
+
+    .btn-outline-danger:hover {
+      color: #fff;
+      background-color: #dc3545;
+      border-color: #dc3545;
+    }
+  </style>
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -171,7 +185,7 @@
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
       <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">Shop Duck</span>
+      <span class="brand-text font-weight-light">Shop Dunk</span>
     </a>
 
 
@@ -204,10 +218,6 @@
   </aside>
 
 
-
-
-
-
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -229,31 +239,30 @@
   <section class="content">
     <div class="container mt-4">
       <h1 class="text-center">Danh sách sản phẩm</h1>
-      <table class="table table-bordered text-center table-striped">
+      <table class="table table-bordered table-hover dataTable dtr-inline collapsed" aria-describedby="example2_info">
         <thead class="table-primary">
         <tr>
 
           <th scope="col">Tên</th>
-          <th scope="col">Danh mục</th>
+          <th scope="col">Giá</th>
           <th scope="col">Mô tả</th>
           <th scope="col">Ảnh</th>
-          <th scope="col">Xóa</th>
-          <th scope="col">Chi tiết</th>
+          <th scope="col">Hành Động</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="product : ${listProduct.content}">
           <td th:text="${product.name}"></td>
-          <td th:text="${product.category.name}"></td>
+          <td th:text="${product.price}"></td>
           <td th:text="${product.description}"></td>
           <td>
-            <img style="object-fit: contain;" width="100px" height="100px" th:src="@{'/image/' + ${product.image}}" alt="">
+            <a th:href="@{/products/view/{id}(id=${product.id})}">
+              <img style="object-fit: contain;" width="100px" height="100px" th:src="@{'/image/' + ${product.image}}" alt="">
+            </a>
           </td>
           <td>
-            <a class="btn btn-outline-danger" th:href="@{/products/delete/{id}(id=${product.id})}">Xóa</a>
-          </td>
-          <td>
-            <a class="btn btn-outline-danger" th:href="@{/products/view/{id}(id=${product.id})}">Chi tiết</a>
+            <a href="#" class="btn btn-danger btn-sm" th:href="@{/products/delete/{id}(id=${product.id})}"
+               onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</a>
           </td>
         </tr>
         </tbody>
