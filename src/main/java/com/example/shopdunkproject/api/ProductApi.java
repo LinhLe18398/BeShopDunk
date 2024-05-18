@@ -1,6 +1,7 @@
 package com.example.shopdunkproject.api;
 
 import com.example.shopdunkproject.model.Product;
+import com.example.shopdunkproject.model.ProductDTO;
 import com.example.shopdunkproject.repository.IAttributeRepository;
 import com.example.shopdunkproject.repository.ICategoryRepository;
 import com.example.shopdunkproject.repository.IProductAttributeRepository;
@@ -8,6 +9,7 @@ import com.example.shopdunkproject.repository.IProductRepository;
 import com.example.shopdunkproject.service.IAttributeService;
 import com.example.shopdunkproject.service.ICategoryService;
 import com.example.shopdunkproject.service.IProductService;
+import com.example.shopdunkproject.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +24,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/products")
+@CrossOrigin(value = "*")
 public class ProductApi {
 
     @Autowired
@@ -41,15 +44,23 @@ public class ProductApi {
     private IAttributeService iAttributeService;
     @Autowired
     private IProductAttributeRepository productAttributeRepository;
+    @Autowired
+    private ProductService productService;
 //
 //    @GetMapping
 //    public ResponseEntity<Page<Product>> list(@PageableDefault(3) Pageable pageable) {
 //        return new ResponseEntity<>(iProductService.findAll(pageable), HttpStatus.OK);
 //    }
 
-    @GetMapping("")
-    public ResponseEntity<Page<Product>> getAllProducts(@PageableDefault(2) Pageable pageable) {
-        Page<Product> products = iProductRepository.findAll(pageable);
+    @GetMapping("/showAll")
+    public ResponseEntity<List<Product>> getAllProducts() {
+        List<Product> products = iProductRepository.findAll();
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/showProductByCategory/{id}")
+    public ResponseEntity<List<Product>> getProductByCategory(@PathVariable long id){
+        List<Product> products = iProductRepository.findProductsByCategory_Id(id);
         return ResponseEntity.ok(products);
     }
 
@@ -75,4 +86,13 @@ public class ProductApi {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    @GetMapping("/findListProductByCategory")
+    public ResponseEntity<Iterable<ProductDTO>> findListProductByCategory() {
+        Iterable<ProductDTO> productDTOList = productService.findListProductByCategory();
+        return ResponseEntity.ok(productDTOList);
+    }
+
+
 }

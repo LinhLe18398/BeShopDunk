@@ -18,7 +18,7 @@ public class Product {
     @Column(name = "product_id")
     private long id;
     private String name;
-    private int price;
+    private String price;
     private String image;
     private String description;
     @ManyToOne

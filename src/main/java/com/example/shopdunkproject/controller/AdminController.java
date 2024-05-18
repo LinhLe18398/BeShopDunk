@@ -46,7 +46,7 @@ public class AdminController {
     private IProductAttributeRepository productAttributeRepository;
 
 
-    public static String UPLOAD_DIRECTORY = "C:\\Users\\namca\\Downloads_Git\\shopDunk-project\\src\\main\\resources\\static\\image\\";
+    public static String UPLOAD_DIRECTORY = "/Users/lengoclinh/Desktop/DuAnShopDunk/DuAn_ShopDunk/src/main/resources/static/image/";
 
     @GetMapping("")
     public ModelAndView showAllProduct(@PageableDefault(2) Pageable pageable) {
@@ -151,4 +151,5 @@ public class AdminController {
         modelAndView.addObject("productDelete",iProductService.findById(id).get());
         return modelAndView;
     }
+
 }
