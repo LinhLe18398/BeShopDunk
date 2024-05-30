@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | Dashboard</title>
+    <title>Chi tiết sản phẩm</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="/https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
     <!-- Ionicons -->
-    <link rel="stylesheet" href="/https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Tempusdominus Bootstrap 4 -->
     <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
     <!-- iCheck -->
@@ -26,296 +26,418 @@
     <!-- summernote -->
     <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
     <style>
-        /* CSS cho kiểu dáng trang */
-        .container {
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 800px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #f9f9f9;
+        .btn-outline-danger {
+            color: #dc3545;
+            border-color: #dc3545;
         }
 
-        h1 {
+        .content {
             text-align: center;
-            margin-bottom: 20px;
+            padding: 20px 100px;
+            padding-bottom: 100px;
+            width: 100%;
+            height: 90%;
+            margin: auto;
         }
 
-        /* CSS cho nút */
-        .btn {
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-
-        .btn-danger {
+        .btn-outline-danger:hover {
+            color: #fff;
             background-color: #dc3545;
-            color: white;
+            border-color: #dc3545;
+        }
+
+        .panel {
+            font-family: 'Roboto', sans-serif;
+            padding: 0;
+            border: none;
+            box-shadow: 0 .3rem .8rem rgba(0, 0, 0, .12);
+        }
+
+        .panel .panel-heading {
+            background: #fff;
+            padding: 10px 25px;
+            border-radius: 0;
+        }
+
+        .panel .panel-heading .title {
+            color: #32393f;
+            font-size: 28px;
+            font-weight: 400;
+            line-height: 30px;
+            text-transform: capitalize;
+            margin: 0;
+        }
+
+        .panel .panel-heading .btn {
+            font-size: 15px;
+            padding: 6px 15px;
+            border-radius: 50px;
+            border: none;
+            transition: all 0.3s ease 0s;
+        }
+
+        .panel .panel-heading .btn:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .panel .panel-body {
+            border-radius: 0;
+        }
+
+        .panel .panel-body .table thead tr th {
+            color: #333;
+            font-size: 19px;
+            font-weight: 400;
+            padding: 12px;
+            text-transform: capitalize;
+        }
+
+        .panel .panel-body .table thead tr th:last-child {
+            width: 120px;
+        }
+
+        .panel .panel-body .table tbody tr td {
+            color: #555;
+            background: #fff;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 10px;
+            vertical-align: middle;
+            border-color: #e7e7e7;
+        }
+
+        .panel .panel-body .table .user_icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 5px 0 0;
+            border-radius: 100px;
+            display: inline-block;
+        }
+
+        .panel .panel-body .table .user_icon img {
+            width: 100%;
+            height: auto;
+            border-radius: 50%;
+        }
+
+        .panel .panel-body .table tbody td span.label {
+            font-size: 13px;
+        }
+
+        .panel .panel-body .table tbody .action-list {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .panel .panel-body .table tbody .action-list li {
+            margin: 0 3px;
+            display: inline-block;
+        }
+
+        .panel .panel-body .table tbody .action-list li a {
+            color: #f41127;
+            background-color: rgb(244 17 39 / 0.11);
+            font-size: 18px;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .panel .panel-body .table tbody .action-list li:last-child a {
+            color: #0d6efd;
+            background-color: rgb(13 110 253 / 0.11);
+        }
+
+        .panel .panel-body .table tbody .action-list li a:hover {
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .panel .panel-footer {
+            background-color: #fff;
+            padding: 10px 25px 25px;
             border: none;
         }
 
-        .btn-secondary {
-            background-color: #6c757d;
-            color: white;
-            border: none;
+        .pagination {
+            margin: 0;
         }
 
-        /* CSS cho việc sắp xếp hai nút trên cùng một hàng */
+        .pagination li a {
+            color: #999;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            line-height: 32px;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            margin: 0 2px;
+            border-radius: 30px;
+            border: none;
+            transition: all 0.3s ease 0s;
+        }
+
+        .pagination li a:hover,
+        .pagination li a:focus,
+        .pagination li.active a {
+            color: #fff;
+            background-color: #286090;
+        }
+
+        .pagination li:first-child a,
+        .pagination li:last-child a {
+            border-radius: 50%;
+        }
+
+        @media only screen and (max-width: 767px) {
+            .panel .panel-heading {
+                text-align: center;
+            }
+
+            .panel .panel-heading .title {
+                margin: 0 0 15px;
+            }
+
+            .panel .panel-heading .text-right {
+                text-align: center;
+            }
+        }
+
+        .footer {
+            padding: 25px 60px;
+            background-color: #ccd7d9;
+        }
+
+        .navbar {
+            padding: 0 50px;
+            background-color: #eaeeee;
+        }
+
+        .form-group {
+            padding: 5px;
+        }
+
+        .product-detail {
+            margin-top: 20px;
+        }
+
+        .product-detail img {
+            object-fit: contain;
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+
+        .product-detail img:hover {
+            transform: scale(1.05);
+        }
+
+        .product-detail .card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .table td {
+            background-color: #fff;
+            font-size: 16px;
+        }
+
         .button-row {
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
         }
 
-        table {
-            width: 100%;
-            margin-bottom: 20px;
-            border-collapse: collapse;
-            border: 1px solid #ddd;
+        .btn-custom {
+            margin: 0 10px;
         }
 
-        th, td {
-            padding: 8px;
-            border: 1px solid #ddd;
-        }
-
-        th {
+        .card-header, .card-footer {
             background-color: #f8f9fa;
         }
     </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
-    <!-- Preloader -->
-
     <!-- Navbar -->
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-        <!-- Left navbar links -->
-        <ul class="navbar-nav">
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="products" class="nav-link">Trang Chủ</a>
-            </li>
-        </ul>
-
-        <!-- Right navbar links -->
-        <ul class="navbar-nav ml-auto">
-            <!-- Navbar Search -->
-            <li class="nav-item">
-                <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                    <i class="fas fa-search"></i>
-                </a>
-                <div class="navbar-search-block">
-                    <form class="form-inline">
-                        <div class="input-group input-group-sm">
-                            <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-                            <div class="input-group-append">
-                                <button class="btn btn-navbar" type="submit">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </li>
-
-            <!-- Messages Dropdown Menu -->
-            <li class="nav-item dropdown">
-                <a class="nav-link" data-toggle="dropdown" href="#">
-                    <i class="far fa-comments"></i>
-                    <span class="badge badge-danger navbar-badge">3</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <a href="#" class="dropdown-item">
-                        <!-- Message Start -->
-                        <div class="media">
-                            <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                            <div class="media-body">
-                                <h3 class="dropdown-item-title">
-                                    Brad Diesel
-                                    <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                </h3>
-                                <p class="text-sm">Call me whenever you can...</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                            </div>
-                        </div>
-                        <!-- Message End -->
+    <div class="navbar">
+        <nav class="navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="/products" class="nav-link">
+                        <i class="fas fa-home fa-2x"></i>
+                        Trang Danh Sách
                     </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <!-- Message Start -->
-                        <div class="media">
-                            <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                            <div class="media-body">
-                                <h3 class="dropdown-item-title">
-                                    John Pierce
-                                    <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                                </h3>
-                                <p class="text-sm">I got your message bro</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                            </div>
-                        </div>
-                        <!-- Message End -->
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <!-- Message Start -->
-                        <div class="media">
-                            <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                            <div class="media-body">
-                                <h3 class="dropdown-item-title">
-                                    Nora Silvester
-                                    <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                                </h3>
-                                <p class="text-sm">The subject goes here</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                            </div>
-                        </div>
-                        <!-- Message End -->
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-                </div>
-            </li>
-            <!-- Notifications Dropdown Menu -->
-            <li class="nav-item dropdown">
-                <a class="nav-link" data-toggle="dropdown" href="#">
-                    <i class="far fa-bell"></i>
-                    <span class="badge badge-warning navbar-badge">15</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <span class="dropdown-item dropdown-header">15 Notifications</span>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-envelope mr-2"></i> 4 new messages
-                        <span class="float-right text-muted text-sm">3 mins</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-users mr-2"></i> 8 friend requests
-                        <span class="float-right text-muted text-sm">12 hours</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-file mr-2"></i> 3 new reports
-                        <span class="float-right text-muted text-sm">2 days</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                    <i class="fas fa-expand-arrows-alt"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
-                    <i class="fas fa-th-large"></i>
-                </a>
-            </li>
-        </ul>
-    </nav>
-    <!-- /.navbar -->
-
-    <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <!-- Brand Logo -->
-        <a href="index3.html" class="brand-link">
-            <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-            <span class="brand-text font-weight-light">Shop Duck</span>
-        </a>
-
-
-
-
-        <!-- Sidebar Menu -->
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-                     with font-awesome or any other icon font library -->
-                <li class="nav-item menu-open">
-                    <a href="#" class="nav-link active">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            Dashboard
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="products" class="nav-link active">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Trang Chủ</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
             </ul>
         </nav>
-    </aside>
-        <!-- Main content -->
-        <section class="content">
-            <div class="container mt-4">
+    </div>
+    <!-- /.navbar -->
 
-                <div class="container" >
-                    <h1>Chi tiết sản phẩm</h1>
-                    <!-- Bảng hiển thị thông tin sản phẩm -->
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>Tên</th>
-                            <th>Giá</th>
-                            <th>Mô tả</th>
-                            <th>Danh mục</th>
-                            <th>Thuộc tính</th>
-                        </tr>
-                        </thead>
-                        <tbody th:object="${productDelete}">
-                        <tr>
-                            <td th:text="${productDelete.name}"></td>
-                            <td th:text="${productDelete.price}"></td>
-                            <td th:text="${productDelete.description}"></td>
-                            <td th:text="${productDelete.category.name}"></td>
-                            <td>
-                                <div th:each="attribute : ${productDelete.getProductAttributes()}">
-                                    <p th:text="${attribute.attribute.name}"></p>
-                                    <p th:text="${attribute.value}"></p>
+    <section class="content">
+        <div class="container mt-4">
+            <h1 class="text-center mb-4">Chi tiết sản phẩm</h1>
+            <div class="product-detail">
+                <div th:if="${product}">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h2 th:text="${product.name}">Tên sản phẩm</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center">
+                                <img th:src="@{'/image/' + ${product.image}}" class="img-fluid img-thumbnail" alt="Hình ảnh sản phẩm">
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">Mô tả</th>
+                                            <td th:text="${product.description}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Giá</th>
+                                            <td th:text="${product.price}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Giảm giá</th>
+                                            <td th:text="${product.discount}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Số lượng</th>
+                                            <td th:text="${product.quantity}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Danh mục</th>
+                                            <td th:text="${product.category.name}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Hệ điều hành</th>
+                                            <td th:text="${product.productDetail.operatingSystem}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Màu sắc</th>
+                                            <td th:text="${product.productDetail.color}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Dung lượng lưu trữ</th>
+                                            <td th:text="${product.productDetail.storage}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Kích thước và trọng lượng</th>
+                                            <td th:text="${product.productDetail.dimensionsAndWeight}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Màn hình</th>
+                                            <td th:text="${product.productDetail.screen}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Độ phân giải màn hình</th>
+                                            <td th:text="${product.productDetail.screenResolution}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Chip</th>
+                                            <td th:text="${product.productDetail.chip}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Tính năng đặc biệt</th>
+                                            <td th:text="${product.productDetail.specialFeatures}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-
-                    <!-- Nút "Quay lại danh sách" và "Xóa" -->
-                    <div class="button-row">
-                        <!-- Nút "Quay lại danh sách" -->
-                        <form th:action="@{/products}" method="get">
-                            <input type="submit" value="Quay lại danh sách" class="btn btn-secondary">
-                        </form>
-                        <!-- Nút "Xóa" -->
-
+                                <div class="col-md-6">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">Yêu cầu hệ thống</th>
+                                            <td th:text="${product.productDetail.systemRequirements}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Khả năng chống nước và bụi</th>
+                                            <td th:text="${product.productDetail.waterAndDustResistance}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Camera sau</th>
+                                            <td th:text="${product.productDetail.rearCamera}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Camera trước</th>
+                                            <td th:text="${product.productDetail.frontCamera}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Quay video</th>
+                                            <td th:text="${product.productDetail.videoRecording}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Bảo mật</th>
+                                            <td th:text="${product.productDetail.security}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Kết nối mạng</th>
+                                            <td th:text="${product.productDetail.networkConnectivity}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Công nghệ âm thanh</th>
+                                            <td th:text="${product.productDetail.audioTechnology}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Xem video</th>
+                                            <td th:text="${product.productDetail.videoViewing}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Sạc</th>
+                                            <td th:text="${product.productDetail.charging}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Pin và năng lượng</th>
+                                            <td th:text="${product.productDetail.batteryAndPower}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Cảm biến</th>
+                                            <td th:text="${product.productDetail.sensors}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">SIM</th>
+                                            <td th:text="${product.productDetail.sim}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div th:unless="${product}" class="alert alert-warning mt-4 text-center">
+                    <p>Không tìm thấy sản phẩm với ID đã cho.</p>
+                </div>
+                <!-- Nút "Quay lại danh sách" -->
+                <div class="button-row mt-4">
+                    <form th:action="@{/products}" method="get">
+                        <button type="submit" class="btn btn-secondary btn-custom">Quay lại danh sách</button>
+                    </form>
+                </div>
             </div>
-        </section>
-        <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
+        </div>
+    </section>
 
-
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
+    <!-- /.content -->
 </div>
-<!-- ./wrapper -->
 
-<!-- jQuery -->
 <script src="/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>

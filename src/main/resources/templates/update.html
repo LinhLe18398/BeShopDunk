@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+        href="/https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="/https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
+  <style>
+    .btn-outline-danger {
+      color: #dc3545;
+      border-color: #dc3545;
+    }
+
+    .content {
+      text-align: center;
+      padding: 20px 100px;
+      padding-bottom: 100px;
+      width: 100%;
+      height: 90%;
+      margin: auto;
+    }
+
+    .btn-outline-danger:hover {
+      color: #fff;
+      background-color: #dc3545;
+      border-color: #dc3545;
+    }
+
+    .panel {
+      font-family: 'Roboto', sans-serif;
+      padding: 0;
+      border: none;
+      box-shadow: 0 .3rem .8rem rgba(0, 0, 0, .12);
+    }
+
+    .panel .panel-heading {
+      background: #fff;
+      padding: 10px 25px;
+      border-radius: 0;
+    }
+
+    .panel .panel-heading .title {
+      color: #32393f;
+      font-size: 28px;
+      font-weight: 400;
+      line-height: 30px;
+      text-transform: capitalize;
+      margin: 0;
+    }
+
+    .panel .panel-heading .btn {
+      font-size: 15px;
+      padding: 6px 15px;
+      border-radius: 50px;
+      border: none;
+      transition: all 0.3s ease 0s;
+    }
+
+    .panel .panel-heading .btn:hover {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .panel .panel-body {
+      border-radius: 0;
+    }
+
+    .panel .panel-body .table thead tr th {
+      color: #333;
+      font-size: 19px;
+      font-weight: 400;
+      padding: 12px;
+    }
+
+    .panel .panel-body .table thead tr th:last-child {
+      width: 120px;
+    }
+
+    .panel .panel-body .table tbody tr td {
+      color: #555;
+      background: #fff;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 10px;
+      vertical-align: middle;
+      border-color: #e7e7e7;
+    }
+
+    .panel .panel-body .table .user_icon {
+      width: 50px;
+      height: 50px;
+      margin: 0 5px 0 0;
+      border-radius: 100px;
+      display: inline-block;
+    }
+
+    .panel .panel-body .table .user_icon img {
+      width: 100%;
+      height: auto;
+      border-radius: 50%;
+    }
+
+    .panel .panel-body .table tbody td span.label {
+      font-size: 13px;
+    }
+
+    .panel .panel-body .table tbody .action-list {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .panel .panel-body .table tbody .action-list li {
+      margin: 0 3px;
+      display: inline-block;
+    }
+
+    .panel .panel-body .table tbody .action-list li a {
+      color: #f41127;
+      background-color: rgb(244 17 39 / 0.11);
+      font-size: 18px;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .panel .panel-body .table tbody .action-list li:last-child a {
+      color: #0d6efd;
+      background-color: rgb(13 110 253 / 0.11);
+    }
+
+    .panel .panel-body .table tbody .action-list li a:hover {
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .panel .panel-footer {
+      background-color: #fff;
+      padding: 10px 25px 25px;
+      border: none;
+    }
+
+    .pagination {
+      margin: 0;
+    }
+
+    .pagination li a {
+      color: #999;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      line-height: 32px;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      margin: 0 2px;
+      border-radius: 30px;
+      border: none;
+      transition: all 0.3s ease 0s;
+    }
+
+    .pagination li a:hover,
+    .pagination li a:focus,
+    .pagination li.active a {
+      color: #fff;
+      background-color: #286090;
+    }
+
+    .pagination li:first-child a,
+    .pagination li:last-child a {
+      border-radius: 50%;
+    }
+
+    @media only screen and (max-width: 767px) {
+      .panel .panel-heading {
+        text-align: center;
+      }
+
+      .panel .panel-heading .title {
+        margin: 0 0 15px;
+      }
+
+      .panel .panel-heading .text-right {
+        text-align: center;
+      }
+    }
+
+    .footer {
+      padding: 25px 60px;
+      background-color: #ccd7d9;
+    }
+
+    .navbar {
+      padding: 0 50px;
+      background-color: #eaeeee;
+    }
+
+    .form-group {
+      padding: 5px;
+    }
+  </style>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+  <!-- Navbar -->
+  <div class="navbar">
+    <nav class="navbar navbar-expand navbar-white navbar-light">
+      <!-- Left navbar links -->
+      <ul class="navbar-nav">
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="/products" class="nav-link">
+            <i class="fas fa-home fa-2x"></i>
+            Trang Danh Sách
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <!-- /.navbar -->
+
+  <section class="content">
+    <div class="container">
+      <h1 class="mb-4 text-center">Cập nhật sản phẩm</h1>
+
+      <form class="panel-body" th:action="@{/products/update/{id}(id=${product.id})}" method="POST" th:object="${product}" enctype="multipart/form-data">
+        <div class="row">
+          <!-- Left Column -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="name">Tên sản phẩm<span style="color: red;">*</span></label>
+              <input type="text" id="name" name="name" class="form-control" th:value="*{name}" required>
+            </div>
+            <div class="form-group">
+              <label for="quantity">Số lượng<span style="color: red;">*</span></label>
+              <input type="number" id="quantity" name="quantity" class="form-control" th:value="*{quantity}" required>
+            </div>
+            <div class="form-group">
+              <label for="price">Giá<span style="color: red;">*</span></label>
+              <input type="number" step="0.01" id="price" name="price" class="form-control" th:value="*{price}" required>
+            </div>
+            <div class="form-group">
+              <label for="discount">Giảm giá<span style="color: red;">*</span></label>
+              <input type="number" id="discount" name="discount" class="form-control" th:value="*{discount}" required>
+            </div>
+            <div class="form-group">
+              <label for="operatingSystem">Hệ điều hành<span style="color: red;">*</span></label>
+              <input type="text" id="operatingSystem" name="operatingSystem" class="form-control" th:value="*{productDetail.operatingSystem}" required>
+            </div>
+            <div class="form-group">
+              <label for="specialFeatures">Tính năng đặc biệt</label>
+              <input type="text" id="specialFeatures" name="specialFeatures" class="form-control" th:value="*{productDetail.specialFeatures}">
+            </div>
+            <div class="form-group">
+              <label for="systemRequirements">Yêu cầu hệ thống</label>
+              <input type="text" id="systemRequirements" name="systemRequirements" class="form-control" th:value="*{productDetail.systemRequirements}">
+            </div>
+            <div class="form-group">
+              <label for="color">Màu sắc</label>
+              <input type="text" id="color" name="color" class="form-control" th:value="*{productDetail.color}">
+            </div>
+            <div class="form-group">
+              <label for="storage">Bộ nhớ</label>
+              <input type="text" id="storage" name="storage" class="form-control" th:value="*{productDetail.storage}">
+            </div>
+            <div class="form-group">
+              <label for="dimensionsAndWeight">Kích thước và Trọng lượng</label>
+              <input type="text" id="dimensionsAndWeight" name="dimensionsAndWeight" class="form-control" th:value="*{productDetail.dimensionsAndWeight}">
+            </div>
+            <div class="form-group">
+              <label for="screen">Màn hình</label>
+              <input type="text" id="screen" name="screen" class="form-control" th:value="*{productDetail.screen}">
+            </div>
+            <div class="form-group">
+              <label for="screenResolution">Độ phân giải màn hình</label>
+              <input type="text" id="screenResolution" name="screenResolution" class="form-control" th:value="*{productDetail.screenResolution}">
+            </div>
+            <div class="form-group">
+              <label for="category">Danh mục<span style="color: red;">*</span></label>
+              <select id="category" name="category" class="form-control">
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="*{category.id == category.id}"></option>
+              </select>
+            </div>
+            <div class="form-group">
+              <input type="file" id="file" name="file" class="form-control-file">
+            </div>
+          </div>
+          <!-- Right Column -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="waterAndDustResistance">Khả năng chống nước và bụi</label>
+              <input type="text" id="waterAndDustResistance" name="waterAndDustResistance" class="form-control" th:value="*{productDetail.waterAndDustResistance}">
+            </div>
+            <div class="form-group">
+              <label for="chip">Chip</label>
+              <input type="text" id="chip" name="chip" class="form-control" th:value="*{productDetail.chip}">
+            </div>
+            <div class="form-group">
+              <label for="rearCamera">Camera sau</label>
+              <input type="text" id="rearCamera" name="rearCamera" class="form-control" th:value="*{productDetail.rearCamera}">
+            </div>
+            <div class="form-group">
+              <label for="frontCamera">Camera trước</label>
+              <input type="text" id="frontCamera" name="frontCamera" class="form-control" th:value="*{productDetail.frontCamera}">
+            </div>
+            <div class="form-group">
+              <label for="videoRecording">Ghi hình</label>
+              <input type="text" id="videoRecording" name="videoRecording" class="form-control" th:value="*{productDetail.videoRecording}">
+            </div>
+            <div class="form-group">
+              <label for="security">Bảo mật</label>
+              <input type="text" id="security" name="security" class="form-control" th:value="*{productDetail.security}">
+            </div>
+            <div class="form-group">
+              <label for="networkConnectivity">Kết nối mạng</label>
+              <input type="text" id="networkConnectivity" name="networkConnectivity" class="form-control" th:value="*{productDetail.networkConnectivity}">
+            </div>
+            <div class="form-group">
+              <label for="audioTechnology">Công nghệ âm thanh</label>
+              <input type="text" id="audioTechnology" name="audioTechnology" class="form-control" th:value="*{productDetail.audioTechnology}">
+            </div>
+            <div class="form-group">
+              <label for="videoViewing">Xem video</label>
+              <input type="text" id="videoViewing" name="videoViewing" class="form-control" th:value="*{productDetail.videoViewing}">
+            </div>
+            <div class="form-group">
+              <label for="charging">Sạc</label>
+              <input type="text" id="charging" name="charging" class="form-control" th:value="*{productDetail.charging}">
+            </div>
+            <div class="form-group">
+              <label for="batteryAndPower">Pin và nguồn</label>
+              <input type="text" id="batteryAndPower" name="batteryAndPower" class="form-control" th:value="*{productDetail.batteryAndPower}">
+            </div>
+            <div class="form-group">
+              <label for="sensors">Cảm biến</label>
+              <input type="text" id="sensors" name="sensors" class="form-control" th:value="*{productDetail.sensors}">
+            </div>
+            <div class="form-group">
+              <label for="sim">Sim</label>
+              <input type="text" id="sim" name="sim" class="form-control" th:value="*{productDetail.sim}">
+            </div>
+            <div class="form-group">
+              <label for="description">Mô tả<span style="color: red;">*</span></label>
+              <textarea id="description" name="description" class="form-control" required th:text="*{description}"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary mt-4">Cập nhật sản phẩm</button>
+        </div>
+      </form>
+    </div>
+  </section>
+  <!-- /.content -->
+</div>
+
+
+<script src="/plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- ChartJS -->
+<script src="/plugins/chart.js/Chart.min.js"></script>
+<!-- Sparkline -->
+<script src="/plugins/sparklines/sparkline.js"></script>
+<!-- JQVMap -->
+<script src="/plugins/jqvmap/jquery.vmap.min.js"></script>
+<script src="/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- daterangepicker -->
+<script src="/plugins/moment/moment.min.js"></script>
+<script src="/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Summernote -->
+<script src="/plugins/summernote/summernote-bs4.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/dist/js/adminlte.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/dist/js/demo.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/dist/js/pages/dashboard.js"></script>
+</body>
+</html>

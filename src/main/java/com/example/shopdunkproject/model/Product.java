@@ -15,16 +15,21 @@ import java.util.Set;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
     private long id;
     private String name;
-    private String price;
+    private int quantity;
+    private double price;
     private String image;
     private String description;
-    @ManyToOne
-    private Category category;
+    private int discount;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-//    @EqualsAndHashCode.Exclude
-    List<ProductAttribute> productAttributes;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    public Category category;
+
+
+    @OneToOne
+    public ProductDetail productDetail;
+
 }

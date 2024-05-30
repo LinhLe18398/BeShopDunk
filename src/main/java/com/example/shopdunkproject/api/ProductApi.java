@@ -2,23 +2,17 @@ package com.example.shopdunkproject.api;
 
 import com.example.shopdunkproject.model.Product;
 import com.example.shopdunkproject.model.ProductDTO;
-import com.example.shopdunkproject.repository.IAttributeRepository;
 import com.example.shopdunkproject.repository.ICategoryRepository;
-import com.example.shopdunkproject.repository.IProductAttributeRepository;
 import com.example.shopdunkproject.repository.IProductRepository;
-import com.example.shopdunkproject.service.IAttributeService;
 import com.example.shopdunkproject.service.ICategoryService;
 import com.example.shopdunkproject.service.IProductService;
 import com.example.shopdunkproject.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,24 +27,29 @@ public class ProductApi {
     private IProductRepository iProductRepository;
 
     @Autowired
-    private IProductAttributeRepository iProductAttributeRepository;
-    @Autowired
-    private ICategoryRepository iCategoryRepository;
-    @Autowired
-    private ICategoryService iCategoryService;
-    @Autowired
-    private IAttributeRepository iAttributeRepository;
-    @Autowired
-    private IAttributeService iAttributeService;
-    @Autowired
-    private IProductAttributeRepository productAttributeRepository;
-    @Autowired
     private ProductService productService;
-//
-//    @GetMapping
-//    public ResponseEntity<Page<Product>> list(@PageableDefault(3) Pageable pageable) {
-//        return new ResponseEntity<>(iProductService.findAll(pageable), HttpStatus.OK);
+
+    @GetMapping("/cart")
+    public ResponseEntity<List<Product>> getCartItems() {
+        return new ResponseEntity<>(productListCart, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/removeFromCart/{id}")
+    public ResponseEntity<List<Product>> removeFromCart(@PathVariable long id) {
+        productListCart.removeIf(product -> product.getId() == id);
+        return new ResponseEntity<>(productListCart, HttpStatus.OK);
+    }
+
+    List<Product> productListCart = new ArrayList<>();
+//    public List<Product> resetProductListCart(){
+//        return productListCart;
 //    }
+    @PostMapping("/addToCart/{id}")
+    public ResponseEntity<List<Product>> addToCart(@PathVariable long id){
+       Optional<Product> product = iProductRepository.findById(id);
+        productListCart.add(product.get());
+        return new ResponseEntity<>(productListCart, HttpStatus.OK);
+    }
 
     @GetMapping("/showAll")
     public ResponseEntity<List<Product>> getAllProducts() {
@@ -58,11 +57,7 @@ public class ProductApi {
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/showProductByCategory/{id}")
-    public ResponseEntity<List<Product>> getProductByCategory(@PathVariable long id){
-        List<Product> products = iProductRepository.findProductsByCategory_Id(id);
-        return ResponseEntity.ok(products);
-    }
+
 
     @PostMapping("")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
@@ -79,7 +74,6 @@ public class ProductApi {
             product.setDescription(productDetails.getDescription());
             product.setPrice(productDetails.getPrice());
             product.setImage(productDetails.getImage());
-            // Update other fields as necessary
             iProductRepository.save(product);
             return ResponseEntity.ok(product);
         } else {
@@ -92,6 +86,16 @@ public class ProductApi {
     public ResponseEntity<Iterable<ProductDTO>> findListProductByCategory() {
         Iterable<ProductDTO> productDTOList = productService.findListProductByCategory();
         return ResponseEntity.ok(productDTOList);
+    }
+
+    @GetMapping("getInfoProduct/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable long id) {
+        Optional<Product> product = iProductRepository.findById(id);
+        if (product.isPresent()) {
+            return ResponseEntity.ok(product.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 

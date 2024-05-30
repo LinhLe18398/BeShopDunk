@@ -6,7 +6,8 @@
     <title>AdminLTE 3 | Dashboard</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="/https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet"
+          href="/https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
     <!-- Ionicons -->
@@ -25,281 +26,356 @@
     <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
     <!-- summernote -->
     <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
-
     <style>
+        .btn-outline-danger {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+
         .content {
-            padding: 20px;
+            text-align: center;
+            padding: 20px 100px;
+            padding-bottom: 100px;
+            width: 100%;
+            height: 90%;
+            margin: auto;
         }
-        .form-group label {
-            font-weight: bold;
+
+        .btn-outline-danger:hover {
+            color: #fff;
+            background-color: #dc3545;
+            border-color: #dc3545;
         }
-        .btn-primary {
-            margin-top: 20px;
+
+        .panel {
+            font-family: 'Roboto', sans-serif;
+            padding: 0;
+            border: none;
+            box-shadow: 0 .3rem .8rem rgba(0, 0, 0, .12);
+        }
+
+        .panel .panel-heading {
+            background: #fff;
+            padding: 10px 25px;
+            border-radius: 0;
+        }
+
+        .panel .panel-heading .title {
+            color: #32393f;
+            font-size: 28px;
+            font-weight: 400;
+            line-height: 30px;
+            text-transform: capitalize;
+            margin: 0;
+        }
+
+        .panel .panel-heading .btn {
+            font-size: 15px;
+            padding: 6px 15px;
+            border-radius: 50px;
+            border: none;
+            transition: all 0.3s ease 0s;
+        }
+
+        .panel .panel-heading .btn:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .panel .panel-body {
+            border-radius: 0;
+        }
+
+        .panel .panel-body .table thead tr th {
+            color: #333;
+            font-size: 19px;
+            font-weight: 400;
+            padding: 12px;
+        }
+
+        .panel .panel-body .table thead tr th:last-child {
+            width: 120px;
+        }
+
+        .panel .panel-body .table tbody tr td {
+            color: #555;
+            background: #fff;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 10px;
+            vertical-align: middle;
+            border-color: #e7e7e7;
+        }
+
+        .panel .panel-body .table .user_icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 5px 0 0;
+            border-radius: 100px;
+            display: inline-block;
+        }
+
+        .panel .panel-body .table .user_icon img {
+            width: 100%;
+            height: auto;
+            border-radius: 50%;
+        }
+
+        .panel .panel-body .table tbody td span.label {
+            font-size: 13px;
+        }
+
+        .panel .panel-body .table tbody .action-list {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .panel .panel-body .table tbody .action-list li {
+            margin: 0 3px;
+            display: inline-block;
+        }
+
+        .panel .panel-body .table tbody .action-list li a {
+            color: #f41127;
+            background-color: rgb(244 17 39 / 0.11);
+            font-size: 18px;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .panel .panel-body .table tbody .action-list li:last-child a {
+            color: #0d6efd;
+            background-color: rgb(13 110 253 / 0.11);
+        }
+
+        .panel .panel-body .table tbody .action-list li a:hover {
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .panel .panel-footer {
+            background-color: #fff;
+            padding: 10px 25px 25px;
+            border: none;
+        }
+
+        .pagination {
+            margin: 0;
+        }
+
+        .pagination li a {
+            color: #999;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            line-height: 32px;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            margin: 0 2px;
+            border-radius: 30px;
+            border: none;
+            transition: all 0.3s ease 0s;
+        }
+
+        .pagination li a:hover,
+        .pagination li a:focus,
+        .pagination li.active a {
+            color: #fff;
+            background-color: #286090;
+        }
+
+        .pagination li:first-child a,
+        .pagination li:last-child a {
+            border-radius: 50%;
+        }
+
+        @media only screen and (max-width: 767px) {
+            .panel .panel-heading {
+                text-align: center;
+            }
+
+            .panel .panel-heading .title {
+                margin: 0 0 15px;
+            }
+
+            .panel .panel-heading .text-right {
+                text-align: center;
+            }
+        }
+
+        .footer {
+            padding: 25px 60px;
+            background-color: #ccd7d9;
+        }
+
+        .navbar {
+            padding: 0 50px;
+            background-color: #eaeeee;
+        }
+
+        .form-group {
+            padding: 5px;
         }
     </style>
 </head>
-
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
-    <!-- Preloader -->
-
     <!-- Navbar -->
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-        <!-- Left navbar links -->
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" data-widget="" href="#" role="button"><i class="fas fa-bars"></i></a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="/products" class="nav-link">Trang Chủ</a>
-            </li>
-        </ul>
-
-        <!-- Right navbar links -->
-        <ul class="navbar-nav ml-auto">
-            <!-- Navbar Search -->
-            <li class="nav-item">
-                <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                    <i class="fas fa-search"></i>
-                </a>
-                <div class="navbar-search-block">
-                    <form class="form-inline">
-                        <div class="input-group input-group-sm">
-                            <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-                            <div class="input-group-append">
-                                <button class="btn btn-navbar" type="submit">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </li>
-
-            <!-- Messages Dropdown Menu -->
-            <li class="nav-item dropdown">
-                <a class="nav-link" data-toggle="dropdown" href="#">
-                    <i class="far fa-comments"></i>
-                    <span class="badge badge-danger navbar-badge">3</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <a href="#" class="dropdown-item">
-                        <!-- Message Start -->
-                        <div class="media">
-                            <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                            <div class="media-body">
-                                <h3 class="dropdown-item-title">
-                                    Brad Diesel
-                                    <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                </h3>
-                                <p class="text-sm">Call me whenever you can...</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                            </div>
-                        </div>
-                        <!-- Message End -->
+    <div class="navbar">
+        <nav class="navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="/products" class="nav-link">
+                        <i class="fas fa-home fa-2x"></i>
+                        Trang Danh Sách
                     </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <!-- Message Start -->
-                        <div class="media">
-                            <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                            <div class="media-body">
-                                <h3 class="dropdown-item-title">
-                                    John Pierce
-                                    <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                                </h3>
-                                <p class="text-sm">I got your message bro</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                            </div>
-                        </div>
-                        <!-- Message End -->
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <!-- Message Start -->
-                        <div class="media">
-                            <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                            <div class="media-body">
-                                <h3 class="dropdown-item-title">
-                                    Nora Silvester
-                                    <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                                </h3>
-                                <p class="text-sm">The subject goes here</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                            </div>
-                        </div>
-                        <!-- Message End -->
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-                </div>
-            </li>
-            <!-- Notifications Dropdown Menu -->
-            <li class="nav-item dropdown">
-                <a class="nav-link" data-toggle="dropdown" href="#">
-                    <i class="far fa-bell"></i>
-                    <span class="badge badge-warning navbar-badge">15</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <span class="dropdown-item dropdown-header">15 Notifications</span>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-envelope mr-2"></i> 4 new messages
-                        <span class="float-right text-muted text-sm">3 mins</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-users mr-2"></i> 8 friend requests
-                        <span class="float-right text-muted text-sm">12 hours</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-file mr-2"></i> 3 new reports
-                        <span class="float-right text-muted text-sm">2 days</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                    <i class="fas fa-expand-arrows-alt"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
-                    <i class="fas fa-th-large"></i>
-                </a>
-            </li>
-        </ul>
-    </nav>
-    <!-- /.navbar -->
-
-    <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <!-- Brand Logo -->
-        <a href="products" class="brand-link">
-            <span class="brand-text font-weight-light">Shop Dunk</span>
-        </a>
-
-
-
-
-        <!-- Sidebar Menu -->
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-                     with font-awesome or any other icon font library -->
-                <li class="nav-item menu-open">
-                    <a href="#" class="nav-link active">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            Dashboard
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="products" class="nav-link active">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Trang Chủ</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
             </ul>
         </nav>
-    </aside>
-
-
-
-
-
-
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-12">
-                        <h1 class="m-0"></h1>
-                    </div><!-- /.col -->
-                    <div class="col-sm-12 ">
-                        <ol class="breadcrumb float-sm-right">
-                            <a class="btn btn-primary" href="/products/create">Tạo Sản Phẩm</a>
-                        </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </div>
-
-        <!-- Main content -->
-        <section class="content">
-            <div class="container">
-                <h1 class="mb-4" style="text-align: center">Thêm sản phẩm</h1>
-
-                <form th:action="@{/products/save}" th:object="${product}" method="post" enctype="multipart/form-data">
-
-
-                    <div class="form-group">
-                        <label for="name">Tên sản phẩm:</label>
-                        <input type="text" id="name" th:field="*{name}" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="price">Giá Sản Phẩm:</label>
-                        <input type="text" id="price" th:field="*{price}" class="form-control">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="description">Mô tả:</label>
-                        <input type="text" id="description" th:field="*{description}" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="category">Loại sản phẩm:</label>
-                        <select id="category" th:field="*{category}" class="form-control">
-                            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-                        </select>
-                    </div>
-
-                    <!-- Loop through attributes -->
-                    <div th:each="attribute : ${attributes}" class="form-group">
-                        <label th:for="${'attributeValues[' + attribute.id + ']'}" th:text="${attribute.name}"></label>
-                        <input type="text" th:id="${'attributeValues[' + attribute.id + ']'}" th:name="${ 'productAttributes[' + attribute.id + ']' }" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="file">Ảnh:</label>
-                        <input type="file" id="file" name="file" class="form-control-file" required>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </div>
-                </form>
-            </div>
-        </section>
-        <!-- /.content -->
     </div>
-    <!-- /.content-wrapper -->
-    <footer class="main-footer">
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-        All rights reserved.
-        <div class="float-right d-none d-sm-inline-block">
-            <b>Version</b> 3.2.0
+    <!-- /.navbar -->
+
+    <section class="content">
+        <div class="container">
+            <h1 class="mb-4 text-center">Thêm sản phẩm</h1>
+
+            <form class="panel-body" th:action="@{/products/save}" method="POST" th:object="${product}"
+                  enctype="multipart/form-data">
+                <div class="row">
+                    <!-- Left Column -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="name">Tên sản phẩm<span style="color: red;">*</span></label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Số lượng<span style="color: red;">*</span></label>
+                            <input type="number" id="quantity" name="quantity" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Giá<span style="color: red;">*</span></label>
+                            <input type="number" step="0.01" id="price" name="price" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="discount">Giảm giá<span style="color: red;">*</span></label>
+                            <input type="number" id="discount" name="discount" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="operatingSystem">Hệ điều hành<span style="color: red;">*</span></label>
+                            <input type="text" id="operatingSystem" name="operatingSystem" class="form-control"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="specialFeatures">Tính năng đặc biệt</label>
+                            <input type="text" id="specialFeatures" name="specialFeatures" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="systemRequirements">Yêu cầu hệ thống</label>
+                            <input type="text" id="systemRequirements" name="systemRequirements" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="color">Màu sắc</label>
+                            <input type="text" id="color" name="color" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="storage">Bộ nhớ</label>
+                            <input type="text" id="storage" name="storage" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="dimensionsAndWeight">Kích thước và Trọng lượng</label>
+                            <input type="text" id="dimensionsAndWeight" name="dimensionsAndWeight" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="screen">Màn hình</label>
+                            <input type="text" id="screen" name="screen" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="screenResolution">Độ phân giải màn hình</label>
+                            <input type="text" id="screenResolution" name="screenResolution" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Danh mục<span style="color: red;">*</span></label>
+                            <select id="category" th:field="*{category}" class="form-control">
+                                <option th:each="category : ${categories}" th:value="${category.id}"
+                                        th:text="${category.name}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="file" id="file" name="file" class="form-control-file" required>
+                        </div>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="waterAndDustResistance">Khả năng chống nước và bụi</label>
+                            <input type="text" id="waterAndDustResistance" name="waterAndDustResistance"
+                                   class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="chip">Chip</label>
+                            <input type="text" id="chip" name="chip" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="rearCamera">Camera sau</label>
+                            <input type="text" id="rearCamera" name="rearCamera" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="frontCamera">Camera trước</label>
+                            <input type="text" id="frontCamera" name="frontCamera" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="videoRecording">Ghi hình</label>
+                            <input type="text" id="videoRecording" name="videoRecording" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="security">Bảo mật</label>
+                            <input type="text" id="security" name="security" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="networkConnectivity">Kết nối mạng</label>
+                            <input type="text" id="networkConnectivity" name="networkConnectivity" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="audioTechnology">Công nghệ âm thanh</label>
+                            <input type="text" id="audioTechnology" name="audioTechnology" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="videoViewing">Xem video</label>
+                            <input type="text" id="videoViewing" name="videoViewing" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="charging">Sạc</label>
+                            <input type="text" id="charging" name="charging" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="batteryAndPower">Pin và nguồn</label>
+                            <input type="text" id="batteryAndPower" name="batteryAndPower" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="sensors">Cảm biến</label>
+                            <input type="text" id="sensors" name="sensors" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="sim">Sim</label>
+                            <input type="text" id="sim" name="sim" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Mô tả<span style="color: red;">*</span></label>
+                            <textarea id="description" name="description" class="form-control" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary mt-4">Tạo sản phẩm</button>
+                </div>
+            </form>
         </div>
-    </footer>
-
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
+    </section>
+    <!-- /.content -->
 </div>
-<!-- ./wrapper -->
 
-<!-- jQuery -->
+
 <script src="/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>

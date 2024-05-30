@@ -4,7 +4,6 @@ import com.example.shopdunkproject.model.Category;
 import com.example.shopdunkproject.model.Product;
 import com.example.shopdunkproject.model.ProductDTO;
 import com.example.shopdunkproject.repository.ICategoryRepository;
-import com.example.shopdunkproject.repository.IProductAttributeRepository;
 import com.example.shopdunkproject.repository.IProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,8 +19,6 @@ import java.util.Optional;
 public class ProductService implements IProductService {
 
     @Autowired
-    private IProductAttributeRepository repository;
-    @Autowired
     private IProductRepository iProductRepository;
     @Autowired
     private ICategoryRepository iCategoryRepository;
@@ -34,6 +31,10 @@ public class ProductService implements IProductService {
     @Override
     public Optional<Product> findById(long id) {
         return iProductRepository.findById(id);
+    }
+
+    public void addToCart(Product product){
+
     }
 
     @Override
