@@ -13,10 +13,10 @@ public class ProductDTO {
     private Category category;
     private List<Product> products;
 
-    public ProductDTO() {
+    public ProductDTO(int i, Category category, List<Product> products) {
     }
 
-    public ProductDTO(long id, Category category, List<Product> products) {
+    public ProductDTO(Category category, List<Product> products) {
         this.id = id;
         this.category = category;
         this.products = products;

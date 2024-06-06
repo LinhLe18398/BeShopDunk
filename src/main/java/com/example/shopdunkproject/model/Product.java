@@ -32,4 +32,5 @@ public class Product {
     @OneToOne
     public ProductDetail productDetail;
 
+
 }
