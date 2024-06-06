@@ -31,7 +31,7 @@ public class UserApi {
         if (user != null) {
             return ResponseEntity.ok(Map.of("success", true, "user", user));
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "Invalid username or password"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "sai tên đăng nhập hoặc mật khẩu "));
         }
     }
 }

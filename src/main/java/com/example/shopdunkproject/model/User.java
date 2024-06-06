@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     private String userName;
     private String password;
     private String email;
@@ -25,6 +25,5 @@ public class User {
     private String fullName;
     private String gender;
 
-    @OneToOne(mappedBy = "user")
-    private Cart cart;
+
 }

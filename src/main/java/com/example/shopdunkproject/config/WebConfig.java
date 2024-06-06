@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
-                .addResourceLocations("file:/Users/lengoclinh/Desktop/DuAnShopDunk/DuAn_ShopDunk/src/main/resources/static/");
+                .addResourceLocations("file:C:\\Users\\namca\\Downloads_Git\\DuAn_ShopDunk\\src\\main\\resources\\static\\");
 
     }
 }

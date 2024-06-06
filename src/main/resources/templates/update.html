@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -91,7 +91,6 @@
       font-weight: 400;
       padding: 12px;
     }
-
     .panel .panel-body .table thead tr th:last-child {
       width: 120px;
     }
@@ -272,18 +271,7 @@
               <label for="systemRequirements">Yêu cầu hệ thống</label>
               <input type="text" id="systemRequirements" name="systemRequirements" class="form-control" th:value="*{productDetail.systemRequirements}">
             </div>
-            <div class="form-group">
-              <label for="color">Màu sắc</label>
-              <input type="text" id="color" name="color" class="form-control" th:value="*{productDetail.color}">
-            </div>
-            <div class="form-group">
-              <label for="storage">Bộ nhớ</label>
-              <input type="text" id="storage" name="storage" class="form-control" th:value="*{productDetail.storage}">
-            </div>
-            <div class="form-group">
-              <label for="dimensionsAndWeight">Kích thước và Trọng lượng</label>
-              <input type="text" id="dimensionsAndWeight" name="dimensionsAndWeight" class="form-control" th:value="*{productDetail.dimensionsAndWeight}">
-            </div>
+
             <div class="form-group">
               <label for="screen">Màn hình</label>
               <input type="text" id="screen" name="screen" class="form-control" th:value="*{productDetail.screen}">
@@ -305,25 +293,99 @@
           <!-- Right Column -->
           <div class="col-md-6">
             <div class="form-group">
+              <label for="color" >Màu sắc</label>
+              <select id="color" name="color" class="form-control">
+                <option th:each="color : ${colors}" th:value="${color}" th:text="${color}" th:selected="${color} == ${product.productDetail.color}"></option>
+              </select>
+            </div>
+            <div class="form-group">
               <label for="waterAndDustResistance">Khả năng chống nước và bụi</label>
               <input type="text" id="waterAndDustResistance" name="waterAndDustResistance" class="form-control" th:value="*{productDetail.waterAndDustResistance}">
             </div>
             <div class="form-group">
               <label for="chip">Chip</label>
-              <input type="text" id="chip" name="chip" class="form-control" th:value="*{productDetail.chip}">
+              <select id="chip" name="chip" class="form-control" th:value="*{productDetail.chip}">
+                <option th:each="chip : ${chips}" th:value="${chip}" th:text="${chip}" th:selected="${chip} == ${product.productDetail.chip}"></option>
+              </select>
             </div>
+
             <div class="form-group">
-              <label for="rearCamera">Camera sau</label>
-              <input type="text" id="rearCamera" name="rearCamera" class="form-control" th:value="*{productDetail.rearCamera}">
+              <label for="storage">Bộ nhớ lưu trữ</label>
+              <select id="storage" name="storage" class="form-control" th:value="*{productDetail.storage}">
+                <option th:each="storege : ${storages}" th:value="${storege}" th:text="${storege}" th:selected="${storege} == ${product.productDetail.storage}"></option>
+              </select>
             </div>
+
             <div class="form-group">
-              <label for="frontCamera">Camera trước</label>
-              <input type="text" id="frontCamera" name="frontCamera" class="form-control" th:value="*{productDetail.frontCamera}">
+              <label for="dimensionsAndWeight">Kích thước và trọng lượng</label>
+              <select id="dimensionsAndWeight" name="dimensionsAndWeight" class="form-control" th:value="*{productDetail.dimensionsAndWeight}">
+                <option th:each="dimensionsAndWeight : ${dimensionsAndWeights}" th:value="${dimensionsAndWeight}" th:text="${dimensionsAndWeight}" th:selected="${dimensionsAndWeight} == ${product.productDetail.dimensionsAndWeight}"></option>
+              </select>
             </div>
+
             <div class="form-group">
-              <label for="videoRecording">Ghi hình</label>
-              <input type="text" id="videoRecording" name="videoRecording" class="form-control" th:value="*{productDetail.videoRecording}">
+              <label for="rearCamera">Camera Phía Sau</label>
+              <select id="rearCamera" name="rearCamera" class="form-control" th:value="*{productDetail.rearCamera}">
+                <option th:each="rearCamera : ${rearCameras}" th:value="${rearCamera}" th:text="${rearCamera}" th:selected="${rearCamera} == ${product.productDetail.rearCamera}"></option>
+              </select>
             </div>
+
+            <div class="form-group">
+              <label for="frontCamera">Camera Phía Trước</label>
+              <select id="frontCamera" name="frontCamera" class="form-control" th:value="*{productDetail.frontCamera}">
+                <option th:each="frontCamera : ${frontCameras}" th:value="${frontCamera}" th:text="${frontCamera}" th:selected="${frontCamera} == ${product.productDetail.frontCamera}"></option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="videoRecording">Quay Video</label>
+              <select id="videoRecording" name="videoRecording" class="form-control" th:value="*{productDetail.videoRecording}">
+                <option th:each="videoRecording : ${videoRecordings}" th:value="${videoRecording}" th:text="${videoRecording}" th:selected="${videoRecording} == ${product.productDetail.videoRecording}"></option>
+              </select>
+            </div>
+
+            <script>
+              populateDropdown("chip", chips);
+              populateDropdown("color",colors)
+              populateDropdown("operatingSystem", operatingSystems);
+              populateDropdown("storage", storages);
+              populateDropdown("dimensionsAndWeight", dimensionsAndWeights);
+              populateDropdown("rearCamera", rearCameras);
+              populateDropdown("frontCamera", frontCameras);
+              populateDropdown("videoRecording", videoRecordingOptions);
+              // lấy option của color hoặc storage
+
+              function populateDropdown(id, options) {
+                var select = document.getElementById(id);
+
+                for (var i = 0; i < options.length; i++) {
+                  var option = document.createElement("option");
+                  option.text = options[i];
+                  option.value = options[i];
+                  select.add(option);
+                }
+                document.getElementById("file").addEventListener("change", function(event) {
+                  var fileInput = this;
+                  var filePreview = document.getElementById("file-preview");
+                  var errorMessage = document.getElementById("error-message");
+                  var successMessage = document.getElementById("success-message");
+
+                  // Xóa bỏ hình ảnh cũ và thông báo thành công (nếu có)
+                  filePreview.innerHTML = "";
+                  successMessage.textContent = "";
+                  errorMessage.textContent = "";
+
+                  // Kiểm tra nếu có tệp ảnh được chọn
+                  if (!fileInput.files || fileInput.files.length === 0) {
+                    errorMessage.textContent = "Vui lòng chọn ảnh.";
+                    event.preventDefault();
+                  } else {
+                    successMessage.textContent = "Ảnh đã được chọn thành công.";
+                  }
+
+                });
+              }
+            </script>
             <div class="form-group">
               <label for="security">Bảo mật</label>
               <input type="text" id="security" name="security" class="form-control" th:value="*{productDetail.security}">

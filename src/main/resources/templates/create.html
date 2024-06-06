@@ -216,6 +216,28 @@
         .form-group {
             padding: 5px;
         }
+        .custom-file-upload {
+            display: inline-block;
+            cursor: pointer;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #007bff;
+            border: 1px solid #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #0056b3;
+        }
+
+        #file {
+            display: none;
+        }
+        .error-message {
+            color: red;
+            display: none;
+        }
     </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -241,30 +263,37 @@
             <h1 class="mb-4 text-center">Thêm sản phẩm</h1>
 
             <form class="panel-body" th:action="@{/products/save}" method="POST" th:object="${product}"
-                  enctype="multipart/form-data">
+                  enctype="multipart/form-data" onsubmit="return validateForm()">
                 <div class="row">
                     <!-- Left Column -->
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="name">Tên sản phẩm<span style="color: red;">*</span></label>
-                            <input type="text" id="name" name="name" class="form-control" required>
+                            <input type="text" id="name" name="name" class="form-control">
+                            <div id="error-name" class="error-message">Vui lòng nhập tên sản phẩm.</div>
+
                         </div>
                         <div class="form-group">
                             <label for="quantity">Số lượng<span style="color: red;">*</span></label>
-                            <input type="number" id="quantity" name="quantity" class="form-control" required>
+                            <input type="number" id="quantity" name="quantity" class="form-control">
+                            <span id="error-quantity" class="error-message">Vui lòng nhập số lượng.</span>
                         </div>
                         <div class="form-group">
                             <label for="price">Giá<span style="color: red;">*</span></label>
-                            <input type="number" step="0.01" id="price" name="price" class="form-control" required>
+                            <input type="number" step="0.01" id="price" name="price" class="form-control" >
+                            <span id="error-price" class="error-message">Vui lòng nhập giá.</span>
+
+
                         </div>
                         <div class="form-group">
                             <label for="discount">Giảm giá<span style="color: red;">*</span></label>
-                            <input type="number" id="discount" name="discount" class="form-control" required>
+                            <input type="number" id="discount" name="discount" class="form-control">
+                            <span id="error-discount" class="error-message">Vui lòng nhập giảm giá.</span>
                         </div>
                         <div class="form-group">
-                            <label for="operatingSystem">Hệ điều hành<span style="color: red;">*</span></label>
-                            <input type="text" id="operatingSystem" name="operatingSystem" class="form-control"
-                                   required>
+                            <label for="description">Mô tả<span style="color: red;">*</span></label>
+                            <input id="description" name="description" class="form-control" required>
+                            <span id="error-description" class="error-message">Vui lòng nhập mô tả.</span>
                         </div>
                         <div class="form-group">
                             <label for="specialFeatures">Tính năng đặc biệt</label>
@@ -276,15 +305,8 @@
                         </div>
                         <div class="form-group">
                             <label for="color">Màu sắc</label>
-                            <input type="text" id="color" name="color" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="storage">Bộ nhớ</label>
-                            <input type="text" id="storage" name="storage" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="dimensionsAndWeight">Kích thước và Trọng lượng</label>
-                            <input type="text" id="dimensionsAndWeight" name="dimensionsAndWeight" class="form-control">
+                            <select id="color" name="color" class="form-control">
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="screen">Màn hình</label>
@@ -302,8 +324,16 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <input type="file" id="file" name="file" class="form-control-file" required>
+                            <label for="file" class="custom-file-upload">
+                                <i class="fas fa-cloud-upload-alt"></i> Chọn ảnh
+                            </label>
+                            <input type="file" id="file" name="file" class="form-control-file">
+                            <div id="file-preview" class="file-preview"></div>
+                            <p id="success-message" class="text-success"></p>
+                            <p id="error-message"></p>
+                            <span id="error-file" class="error-message">Vui lòng chọn một tệp ảnh.</span>
                         </div>
+
                     </div>
                     <!-- Right Column -->
                     <div class="col-md-6">
@@ -313,21 +343,152 @@
                                    class="form-control">
                         </div>
                         <div class="form-group">
+                            <label for="operatingSystem">Hệ điều hành</label>
+                            <select id="operatingSystem" name="operatingSystem" class="form-control"></select>
+                        </div>
+
+                        <div class="form-group">
                             <label for="chip">Chip</label>
-                            <input type="text" id="chip" name="chip" class="form-control">
+                            <select id="chip" name="chip" class="form-control"></select>
                         </div>
+
                         <div class="form-group">
-                            <label for="rearCamera">Camera sau</label>
-                            <input type="text" id="rearCamera" name="rearCamera" class="form-control">
+                            <label for="storage">Bộ nhớ lưu trữ</label>
+                            <select id="storage" name="storage" class="form-control"></select>
                         </div>
+
                         <div class="form-group">
-                            <label for="frontCamera">Camera trước</label>
-                            <input type="text" id="frontCamera" name="frontCamera" class="form-control">
+                            <label for="dimensionsAndWeight">Kích thước và trọng lượng</label>
+                            <select id="dimensionsAndWeight" name="dimensionsAndWeight" class="form-control"></select>
                         </div>
+
                         <div class="form-group">
-                            <label for="videoRecording">Ghi hình</label>
-                            <input type="text" id="videoRecording" name="videoRecording" class="form-control">
+                            <label for="rearCamera">Camera Phía Sau</label>
+                            <select id="rearCamera" name="rearCamera" class="form-control"></select>
                         </div>
+
+                        <div class="form-group">
+                            <label for="frontCamera">Camera Phía Trước</label>
+                            <select id="frontCamera" name="frontCamera" class="form-control"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="videoRecording">Quay Video</label>
+                            <select id="videoRecording" name="videoRecording" class="form-control"></select>
+                        </div>
+
+                        <script>
+                            function validateForm() {
+                                var isValid = true;
+
+                                // Lấy giá trị của các trường nhập liệu
+                                var name = document.getElementById('name').value;
+                                var quantity = document.getElementById('quantity').value;
+                                var price = document.getElementById('price').value;
+                                var discount = document.getElementById('discount').value;
+                                var description = document.getElementById('description').value;
+                                var fileInput = document.getElementById('file').value;
+
+                                // Kiểm tra và hiển thị thông báo lỗi cho từng trường
+                                if (name.trim() === "") {
+                                    document.getElementById('error-name').style.display = 'block';
+                                    isValid = false;
+                                } else {
+                                    document.getElementById('error-name').style.display = 'none';
+                                }
+
+
+                                if (quantity.trim() === "") {
+                                    document.getElementById('error-quantity').style.display = 'block';
+                                    isValid = false;
+                                } else {
+                                    document.getElementById('error-quantity').style.display = 'none';
+                                }
+                                if (price.trim() === "") {
+                                    document.getElementById('error-price').style.display = 'block';
+                                    isValid = false;
+                                } else {
+                                    document.getElementById('error-price').style.display = 'none';
+                                }
+
+                                if (discount.trim() === "") {
+                                    document.getElementById('error-discount').style.display = 'block';
+                                    isValid = false;
+                                } else {
+                                    document.getElementById('error-discount').style.display = 'none';
+                                }
+                                if (description.trim() === "") {
+                                    document.getElementById('error-description').style.display = 'block';
+                                    isValid = false;
+                                } else {
+                                    document.getElementById('error-description').style.display = 'none';
+                                }
+
+
+
+                                if (fileInput.files.length === 0) {
+                                    document.getElementById('error-file').style.display = 'block';
+                                    isValid = false;
+                                } else {
+                                    document.getElementById('error-file').style.display = 'none';
+                                }
+
+                                return isValid;  // Ngăn chặn việc gửi form nếu có lỗi
+                            }
+                            var colors = ["Xanh" , "Đỏ" , "Vàng"];
+                            var operatingSystems = ["Windows", "macOS", "Linux"];
+                            var chips = ["Intel", "AMD", "ARM"];
+                            var storages = ["32G","64G","128G","256G","521G","1T"];
+                            var dimensionsAndWeights = ["150.9 x 75.7 x 8.3 mm  194g","144 x 71.4 x 8.1 mm  188g","158 x 77.8 x 8.1 mm  226g"];
+                            var rearCameras = ["12 MP", "16 MP", "20 MP"];
+                            var frontCameras = ["8 MP", "12 MP", "16 MP"];
+                            var videoRecordingOptions = ["1080p", "4K", "8K"];
+
+                            //// thêm var cho đầy đủ  sau đó qua hàm update bên controller thêm như các trường mẫu đã thêm
+                            //sau đó qua update.html
+
+                            populateDropdown("color",colors)
+                            populateDropdown("operatingSystem", operatingSystems);
+                            populateDropdown("chip", chips);
+                            populateDropdown("storage", storages);
+                            populateDropdown("dimensionsAndWeight", dimensionsAndWeights);
+                            populateDropdown("rearCamera", rearCameras);
+                            populateDropdown("frontCamera", frontCameras);
+                            populateDropdown("videoRecording", videoRecordingOptions);
+
+                            function populateDropdown(id, options) {
+                                var select = document.getElementById(id);
+
+                                for (var i = 0; i < options.length; i++) {
+                                    var option = document.createElement("option");
+                                    option.text = options[i];
+                                    option.value = options[i];
+                                    select.add(option);
+                                }
+                                document.getElementById("file").addEventListener("change", function(event) {
+                                    var fileInput = this;
+                                    var filePreview = document.getElementById("file-preview");
+                                    var errorMessage = document.getElementById("error-message");
+                                    var successMessage = document.getElementById("success-message");
+
+                                    // Xóa bỏ hình ảnh cũ và thông báo thành công (nếu có)
+                                    filePreview.innerHTML = "";
+                                    successMessage.textContent = "";
+                                    errorMessage.textContent = "";
+
+                                    // Kiểm tra nếu có tệp ảnh được chọn
+                                    if (!fileInput.files || fileInput.files.length === 0) {
+                                        errorMessage.textContent = "Vui lòng chọn ảnh.";
+                                        event.preventDefault();
+                                    } else {
+                                        successMessage.textContent = "Ảnh đã được chọn thành công.";
+
+                                    }
+
+                                });
+                            }
+
+                        </script>
                         <div class="form-group">
                             <label for="security">Bảo mật</label>
                             <input type="text" id="security" name="security" class="form-control">
@@ -360,14 +521,10 @@
                             <label for="sim">Sim</label>
                             <input type="text" id="sim" name="sim" class="form-control">
                         </div>
-                        <div class="form-group">
-                            <label for="description">Mô tả<span style="color: red;">*</span></label>
-                            <textarea id="description" name="description" class="form-control" required></textarea>
-                        </div>
                     </div>
                 </div>
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary mt-4">Tạo sản phẩm</button>
+                    <button type="submit" class="btn btn-primary mt-4" onclick="return validateForm()"> Tạo sản phẩm</button>
                 </div>
             </form>
         </div>

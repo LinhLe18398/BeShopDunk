@@ -18,12 +18,12 @@ public class UserService {
         Optional<User> existingEmail = userRepository.findByEmail(user.getEmail());
 
         if (existingUserName.isPresent()) {
-            return "Username already exists";
+            return "username đã tồn tại";
         } else if (existingEmail.isPresent()) {
-            return "Email already exists";
+            return "Email đã ồn tại";
         } else {
             userRepository.save(user);
-            return "User registered successfully";
+            return "Đăng ký tài khoản thành công";
         }
     }
 

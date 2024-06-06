@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService implements IProductService {
@@ -22,6 +23,8 @@ public class ProductService implements IProductService {
     private IProductRepository iProductRepository;
     @Autowired
     private ICategoryRepository iCategoryRepository;
+    @Autowired
+    private ICategoryRepository categoryRepository;
 
     @Override
     public void delete(long id) {
@@ -56,6 +59,15 @@ public class ProductService implements IProductService {
             productDTOList.add(productDTO);
         }
         return productDTOList;
+    }
+
+    @Override
+    public List<ProductDTO> getProductsGroupedByCategory() {
+        List<Category> categories = categoryRepository.findAll();
+        return categories.stream().map(category -> {
+            List<Product> products = iProductRepository.findByCategoryId(category.getId());
+            return new ProductDTO(category, products);
+        }).collect(Collectors.toList());
     }
 
 

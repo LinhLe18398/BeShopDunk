@@ -14,4 +14,6 @@ public interface IProductService extends IGenerateService<Product> {
     Optional<Product> findById(long id);
 
     Iterable<ProductDTO> findListProductByCategory();
+
+    List<ProductDTO> getProductsGroupedByCategory();
 }

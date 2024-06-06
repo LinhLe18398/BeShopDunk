@@ -8,23 +8,18 @@ import com.example.shopdunkproject.service.ICategoryService;
 import com.example.shopdunkproject.service.IProductService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.data.domain.Pageable;
-//import org.springframework.data.web.PageableDefault;
-//import org.springframework.data.web.PageableDefault;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-
 import java.io.File;
 import java.io.IOException;
-import java.net.http.HttpRequest;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -43,8 +38,7 @@ public class AdminController {
     @Autowired
     private IProductDetailRepository iProductDetailRepository;
 
-
-    public static String UPLOAD_DIRECTORY = "/Users/lengoclinh/Desktop/DuAnShopDunk/DuAn_ShopDunk/src/main/resources/static/image/";
+    public static String UPLOAD_DIRECTORY = "C:\\Users\\namca\\Downloads_Git\\DuAn_ShopDunk\\src\\main\\resources\\static\\image\\";
 
     private Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
 
@@ -54,14 +48,24 @@ public class AdminController {
         }
         return pattern.matcher(strNum).matches();
     }
+
     @GetMapping("")
-    public ModelAndView showAllProducts(@PageableDefault(5) Pageable pageable) {
+    public ModelAndView showAllProducts(@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         ModelAndView modelAndView = new ModelAndView("index");
-        modelAndView.addObject("listProduct", iProductRepository.findAll(pageable));
+        Page<Product> productPage = iProductRepository.findAll(pageable);
+
+        DecimalFormat df = new DecimalFormat("#,###.00");
+
+        List<Product> formattedProducts = new ArrayList<>();
+        for (Product product : productPage.getContent()) {
+            product.setFormattedPrice(df.format(product.getPrice()));
+            formattedProducts.add(product);
+        }
+
+        Page<Product> formattedProductPage = new PageImpl<>(formattedProducts, pageable, productPage.getTotalElements());
+        modelAndView.addObject("listProduct", formattedProductPage);
         return modelAndView;
     }
-
-
 
     @GetMapping("/delete/{id}")
     public ModelAndView deleteProduct(@PathVariable("id") long id) {
@@ -90,38 +94,35 @@ public class AdminController {
     }
 
     @PostMapping("/save")
-    public ModelAndView createProduct(@RequestParam(value = "name" , required = false) String name,
+    public ModelAndView createProduct(@RequestParam(value = "name", required = false) String name,
                                       @RequestParam(value = "quantity", required = false) int quantity,
                                       @RequestParam(value = "price", required = false) double price,
                                       @RequestParam(value = "file", required = false) MultipartFile imageFile,
                                       @RequestParam(value = "description", required = false) String description,
-                                      @RequestParam(value = "discount",required = false) int discount,
-                                      @RequestParam(value = "category",required = false) long categoryId,
-                                      @RequestParam(value = "operatingSystem",required = false) String operatingSystem,
-                                      @RequestParam(value = "specialFeatures",required = false) String specialFeatures,
-                                      @RequestParam(value = "systemRequirements",required = false) String systemRequirements,
-                                      @RequestParam(value = "color",required = false) String color,
-                                      @RequestParam(value = "storage",required = false) String storage,
-                                      @RequestParam(value = "dimensionsAndWeight",required = false) String dimensionsAndWeight,
-                                      @RequestParam(value = "screen",required = false) String screen,
-                                      @RequestParam(value = "screenResolution",required = false) String screenResolution,
-                                      @RequestParam(value = "waterAndDustResistance",required = false) String waterAndDustResistance,
-                                      @RequestParam(value = "chip",required = false) String chip,
-                                      @RequestParam(value = "rearCamera",required = false) String rearCamera,
-                                      @RequestParam(value = "frontCamera",required = false) String frontCamera,
-                                      @RequestParam(value = "videoRecording",required = false) String videoRecording,
-                                      @RequestParam(value = "security",required = false) String security,
-                                      @RequestParam(value = "networkConnectivity",required = false) String networkConnectivity,
-                                      @RequestParam(value = "audioTechnology",required = false) String audioTechnology,
-                                      @RequestParam(value = "videoViewing",required = false) String videoViewing,
-                                      @RequestParam(value = "charging",required = false) String charging,
-                                      @RequestParam(value = "batteryAndPower",required = false) String batteryAndPower,
-                                      @RequestParam(value = "sensors",required = false) String sensors,
-                                      @RequestParam(value = "sim", required = false) String sim
-    )
-            throws IOException {
+                                      @RequestParam(value = "discount", required = false) int discount,
+                                      @RequestParam(value = "category", required = false) long categoryId,
+                                      @RequestParam(value = "operatingSystem", required = false) String operatingSystem,
+                                      @RequestParam(value = "specialFeatures", required = false) String specialFeatures,
+                                      @RequestParam(value = "systemRequirements", required = false) String systemRequirements,
+                                      @RequestParam(value = "color", required = false) String color,
+                                      @RequestParam(value = "storage", required = false) String storage,
+                                      @RequestParam(value = "dimensionsAndWeight", required = false) String dimensionsAndWeight,
+                                      @RequestParam(value = "screen", required = false) String screen,
+                                      @RequestParam(value = "screenResolution", required = false) String screenResolution,
+                                      @RequestParam(value = "waterAndDustResistance", required = false) String waterAndDustResistance,
+                                      @RequestParam(value = "chip", required = false) String chip,
+                                      @RequestParam(value = "rearCamera", required = false) String rearCamera,
+                                      @RequestParam(value = "frontCamera", required = false) String frontCamera,
+                                      @RequestParam(value = "videoRecording", required = false) String videoRecording,
+                                      @RequestParam(value = "security", required = false) String security,
+                                      @RequestParam(value = "networkConnectivity", required = false) String networkConnectivity,
+                                      @RequestParam(value = "audioTechnology", required = false) String audioTechnology,
+                                      @RequestParam(value = "videoViewing", required = false) String videoViewing,
+                                      @RequestParam(value = "charging", required = false) String charging,
+                                      @RequestParam(value = "batteryAndPower", required = false) String batteryAndPower,
+                                      @RequestParam(value = "sensors", required = false) String sensors,
+                                      @RequestParam(value = "sim", required = false) String sim) throws IOException {
         ModelAndView modelAndView = new ModelAndView("redirect:/products");
-
 
         // Find category by ID
         Optional<Category> categoryOptional = iCategoryRepository.findById(categoryId);
@@ -129,6 +130,7 @@ public class AdminController {
             modelAndView.addObject("error", "Category not found.");
             return modelAndView;
         }
+
         // Create and save ProductDetail
         ProductDetail productDTO = new ProductDetail();
         productDTO.setOperatingSystem(operatingSystem);
@@ -153,6 +155,7 @@ public class AdminController {
         productDTO.setSensors(sensors);
         productDTO.setSim(sim);
         iProductDetailRepository.save(productDTO);
+
         // Create and save Product
         Product product = new Product();
         product.setName(name);
@@ -164,7 +167,9 @@ public class AdminController {
         product.setProductDetail(productDTO);
         product.setImage(uploadImage(imageFile));
         iProductRepository.save(product);
+
         modelAndView.addObject("message", "Product created successfully.");
+        modelAndView.setViewName("redirect:/products");
         return modelAndView;
     }
 
@@ -179,16 +184,12 @@ public class AdminController {
     }
 
     @GetMapping("/view/{id}")
-    public ModelAndView showInfo(@PathVariable long id){
+    public ModelAndView showInfo(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView("view1");
-        modelAndView.addObject("product",iProductRepository.findById(id).get());
+        modelAndView.addObject("product", iProductRepository.findById(id).get());
         modelAndView.addObject("productDetail", iProductDetailRepository.findById(id).get());
         return modelAndView;
     }
-
-
-
-
 
     @PostMapping("/update/{id}")
     public ModelAndView updateProduct(@PathVariable("id") long id,
@@ -233,6 +234,7 @@ public class AdminController {
             modelAndView.addObject("error", "Category not found.");
             return modelAndView;
         }
+
         ProductDetail productDetail = product.getProductDetail();
         productDetail.setOperatingSystem(operatingSystem);
         productDetail.setSpecialFeatures(specialFeatures);
@@ -278,6 +280,16 @@ public class AdminController {
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
             modelAndView.addObject("product", product);
+
+            modelAndView.addObject("colors", Arrays.asList("Xanh", "Đỏ", "Vàng"));
+            modelAndView.addObject("operatingSystem", Arrays.asList("Windows", "macOS", "Linux"));
+            modelAndView.addObject("chips", Arrays.asList("Intel", "AMD", "ARM"));
+            modelAndView.addObject("storages",Arrays.asList("32G","64G","128G","256G","521G","1T"));
+            modelAndView.addObject("dimensionsAndWeights",Arrays.asList("","150.9 x 75.7 x 8.3 mm  194g","144 x 71.4 x 8.1 mm  188g","158 x 77.8 x 8.1 mm  226g"));
+            modelAndView.addObject("rearCameras",Arrays.asList("12 MP", "16 MP", "20 MP"));
+            modelAndView.addObject("frontCameras",Arrays.asList("8 MP", "12 MP", "16 MP"));
+            modelAndView.addObject("videoRecordings",Arrays.asList("1080p", "4K", "8K"));
+
             modelAndView.addObject("categories", iCategoryRepository.findAll());
         } else {
             modelAndView.setViewName("redirect:/products");
@@ -289,35 +301,44 @@ public class AdminController {
     @GetMapping("/search")
     public ModelAndView searchProducts(@RequestParam(value = "name", required = false) String name,
                                        @RequestParam(value = "price", required = false) Double price,
-                                       @PageableDefault(3) Pageable pageable) {
+                                       @RequestParam(value = "sortType", required = false) String sortType,
+                                       @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         ModelAndView modelAndView = new ModelAndView("index");
         Page<Product> resultPage;
+
+        // Xác định sắp xếp
+        Sort sort = Sort.by("id").descending();
+        if ("priceAsc".equals(sortType)) {
+            sort = Sort.by("price").ascending();
+        } else if ("priceDesc".equals(sortType)) {
+            sort = Sort.by("price").descending();
+        }
+
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
         if (name != null && !name.isEmpty() && price != null) {
-            String[] keywords = name.split("\\s+"); // Tách các từ khóa trong chuỗi tìm kiếm
-            List<Product> resultList = new ArrayList<>();
-            for (String keyword : keywords) {
-                resultList.addAll(iProductRepository.findByNameContainingIgnoreCaseAndPriceLessThanEqual(keyword, price, pageable).getContent());
-            }
-            resultPage = new PageImpl<>(resultList, pageable, resultList.size());
+            resultPage = iProductRepository.findByNameContainingIgnoreCaseAndPrice(name, price, pageable);
         } else if (name != null && !name.isEmpty()) {
-            String[] keywords = name.split("\\s+"); // Tách các từ khóa trong chuỗi tìm kiếm
-            List<Product> resultList = new ArrayList<>();
-            for (String keyword : keywords) {
-                resultList.addAll(iProductRepository.findByNameContainingIgnoreCase(keyword, pageable).getContent());
-            }
-            resultPage = new PageImpl<>(resultList, pageable, resultList.size());
+            resultPage = iProductRepository.findByNameContainingIgnoreCase(name, pageable);
         } else if (price != null) {
-            resultPage = iProductRepository.findByPriceLessThanEqual(price, pageable);
+            if ("priceAsc".equals(sortType) || "priceDesc".equals(sortType)) {
+                resultPage = iProductRepository.findByPriceLessThanEqual(price, pageable);
+            } else {
+                resultPage = iProductRepository.findByPrice(price, pageable);
+            }
         } else {
             resultPage = iProductRepository.findAll(pageable);
         }
 
         if (resultPage.isEmpty()) {
-            // Nếu không tìm thấy kết quả, hiển thị thông báo và giữ lại trang hiện tại
             modelAndView.addObject("message", "Không tìm thấy kết quả.");
-            resultPage = iProductRepository.findAll(pageable); // Giữ lại trang hiện tại
         }
+
         modelAndView.addObject("listProduct", resultPage);
+        modelAndView.addObject("name", name);
+        modelAndView.addObject("price", price);
+        modelAndView.addObject("sortType", sortType);
+
         return modelAndView;
     }
 

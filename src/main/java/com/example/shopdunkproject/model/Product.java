@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Set;
 
@@ -32,5 +33,19 @@ public class Product {
     @OneToOne
     public ProductDetail productDetail;
 
+//    @Transient
+//    private String formattedPrice;
+//
+//    public String getFormattedPrice() {
+//        DecimalFormat df = new DecimalFormat("#.##");
+//        return df.format(price);
+//    }
 
+    @Transient
+    private String formattedPrice;
+
+    public String getFormattedPrice() {
+        DecimalFormat df = new DecimalFormat("#,###");
+        return df.format(price);
+    }
 }

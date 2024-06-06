@@ -6,7 +6,6 @@
   <title>AdminLTE 3 | Dashboard</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -151,18 +150,19 @@
       padding: 0 50px;
       background-color: #eaeeee;
     }
-    .navbar-nav{
+
+    .navbar-nav {
       padding-right: 600px;
     }
-    .phantrang{
+
+    .phantrang {
       padding-bottom: 25px;
     }
-    .error-message {
-      color: #dc3545; /* Màu đỏ */
-      font-size: 14px; /* Kích thước font */
-      margin-top: 5px; /* Khoảng cách giữa thông báo và ô input */
+    .error-message{
+      color: red;
+      font-size: 20px;
+      padding-bottom: 5px;
     }
-
   </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -181,16 +181,18 @@
         </li>
       </ul>
       <!-- SEARCH FORM -->
-      <!-- SEARCH FORM -->
-      <!-- SEARCH FORM -->
-      <!-- Message -->
-      <div class="text-muted small search ml-3" th:if="${message}" th:text="${message}"></div>
-      <form class="form-inline ml-3" method="GET" th:action="@{/products/search}">
+
+      <form class="form-inline ml-3" method="GET" th:action="@{/products/search}" onsubmit="return validateSearchForm()">
         <div class="input-group input-group-sm">
           <input class="form-control form-control-navbar" type="search" name="name"
-                 placeholder="Search by name" aria-label="Search">
+                 placeholder="tìm kiếm tên" aria-label="Search" id="nameInput" th:value="${name}">
           <input class="form-control form-control-navbar ml-2" type="search" name="price"
-                 placeholder="Search by price" aria-label="Search">
+                 placeholder="tìm kiếm giá" aria-label="Search" id="priceInput" th:value="${formattedPrice}">
+          <select name="sortType" class="form-control form-control-navbar ml-2">
+            <option value="" th:selected="${sortType == null}">không sắp xếp</option>
+            <option value="priceAsc" th:selected="${sortType == 'priceAsc'}">giá thấp đến cao</option>
+            <option value="priceDesc" th:selected="${sortType == 'priceDesc'}">giá cao đến thấp</option>
+          </select>
           <div class="input-group-append">
             <button class="btn btn-navbar" type="submit">
               <i class="fas fa-search"></i>
@@ -198,11 +200,9 @@
           </div>
         </div>
       </form>
-
-      <!-- Message -->
-
     </nav>
-  </div>    <!-- /.navbar -->
+  </div>
+  <!-- /.navbar -->
 
   <section class="content">
     <div class="container">
@@ -220,6 +220,7 @@
                 </div>
               </div>
             </div>
+
             <div class="panel-body table-responsive">
               <table class="table">
                 <thead class="thead_table">
@@ -231,6 +232,7 @@
                   <th>Hành Động</th>
                 </tr>
                 </thead>
+                <div class=" ml-3 error-message" th:if="${message}" th:text="${message}"></div>
                 <tbody>
                 <tr th:each="product : ${listProduct.content}">
                   <td>
@@ -240,7 +242,7 @@
                     </a>
                   </td>
                   <td th:text="${product.name}"></td>
-                  <td th:text="${product.price}"></td>
+                  <td th:text="${product.formattedPrice} + đ"></td>
                   <td th:text="${product.description}"></td>
                   <td>
                     <ul class="action-list">
@@ -262,14 +264,15 @@
 
             <div class="phantrang d-flex justify-content-center mt-4">
               <a class="btn btn-secondary mr-2" th:if="${listProduct.hasPrevious()}"
-                 th:href="@{/products(page=${listProduct.number - 1})}">Trước</a>
+                 th:href="@{/products/search(page=${listProduct.number - 1}, name=${name}, price=${price}, sortType=${sortType})}">Trước</a>
               <div th:each="page : ${#numbers.sequence(0, listProduct.totalPages - 1)}">
-                <a class="btn mx-1" th:href="@{/products(page=${page})}" th:text="${page + 1}"
+                <a class="btn mx-1" th:href="@{/products/search(page=${page}, name=${name}, price=${price}, sortType=${sortType})}" th:text="${page + 1}"
                    th:classappend="${page == listProduct.number} ? 'btn-primary' : 'btn-secondary'"></a>
               </div>
               <a class="btn btn-secondary ml-2" th:if="${listProduct.hasNext()}"
-                 th:href="@{/products(page=${listProduct.number + 1})}">Sau</a>
+                 th:href="@{/products/search(page=${listProduct.number + 1}, name=${name}, price=${price}, sortType=${sortType})}">Sau</a>
             </div>
+
 
           </div>
         </div>
@@ -311,5 +314,17 @@
 <script src="/dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="/dist/js/pages/dashboard.js"></script>
+<script>
+  function validateSearchForm() {
+    var name = document.getElementById("nameInput").value;
+    var price = document.getElementById("priceInput").value;
+
+    if (name.trim() === "" && price.trim() === "") {
+      alert('Bạn phải nhập ít nhất tên hoặc giá để tìm kiếm !');
+      return false;
+    }
+    return true;
+  }
+</script>
 </body>
 </html>

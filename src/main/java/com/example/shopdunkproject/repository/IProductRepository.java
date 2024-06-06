@@ -18,5 +18,11 @@ public interface IProductRepository extends JpaRepository<Product,Long> {
 
     Page<Product> findByPriceLessThanEqual(Double price, Pageable pageable);
 
-    Page<Product> findByNameContainingIgnoreCaseAndPriceLessThanEqual(String name, Double price, Pageable pageable);
+//    Page<Product> findByNameContainingIgnoreCaseAndPriceLessThanEqual(String name, Double price, Pageable pageable);
+
+    List<Product> findByCategoryId(long id);
+
+    Page<Product> findByNameContainingIgnoreCaseAndPrice(String name, Double price, Pageable pageable);
+
+    Page<Product> findByPrice(Double price, Pageable pageable);
 }
