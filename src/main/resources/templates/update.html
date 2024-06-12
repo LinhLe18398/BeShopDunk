@@ -1,445 +1,636 @@
 <!DOCTYPE html>
-<html lang="en"xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdminLTE 3 | Dashboard</title>
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet"
-        href="/https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="/https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="/dist/css/adminlte.min.css">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
-  <!-- summernote -->
-  <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
-  <style>
-    .btn-outline-danger {
-      color: #dc3545;
-      border-color: #dc3545;
-    }
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="/https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="/https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
+    <style>
+        .btn-outline-danger {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
 
-    .content {
-      text-align: center;
-      padding: 20px 100px;
-      padding-bottom: 100px;
-      width: 100%;
-      height: 90%;
-      margin: auto;
-    }
+        .content {
+            text-align: center;
+            padding: 20px 100px;
+            padding-bottom: 100px;
+            width: 100%;
+            height: 90%;
+            margin: auto;
+        }
 
-    .btn-outline-danger:hover {
-      color: #fff;
-      background-color: #dc3545;
-      border-color: #dc3545;
-    }
+        .btn-outline-danger:hover {
+            color: #fff;
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
 
-    .panel {
-      font-family: 'Roboto', sans-serif;
-      padding: 0;
-      border: none;
-      box-shadow: 0 .3rem .8rem rgba(0, 0, 0, .12);
-    }
+        .panel {
+            font-family: 'Roboto', sans-serif;
+            padding: 0;
+            border: none;
+            box-shadow: 0 .3rem .8rem rgba(0, 0, 0, .12);
+        }
 
-    .panel .panel-heading {
-      background: #fff;
-      padding: 10px 25px;
-      border-radius: 0;
-    }
+        .panel .panel-heading {
+            background: #fff;
+            padding: 10px 25px;
+            border-radius: 0;
+        }
 
-    .panel .panel-heading .title {
-      color: #32393f;
-      font-size: 28px;
-      font-weight: 400;
-      line-height: 30px;
-      text-transform: capitalize;
-      margin: 0;
-    }
+        .panel .panel-heading .title {
+            color: #32393f;
+            font-size: 28px;
+            font-weight: 400;
+            line-height: 30px;
+            text-transform: capitalize;
+            margin: 0;
+        }
 
-    .panel .panel-heading .btn {
-      font-size: 15px;
-      padding: 6px 15px;
-      border-radius: 50px;
-      border: none;
-      transition: all 0.3s ease 0s;
-    }
+        .panel .panel-heading .btn {
+            font-size: 15px;
+            padding: 6px 15px;
+            border-radius: 50px;
+            border: none;
+            transition: all 0.3s ease 0s;
+        }
 
-    .panel .panel-heading .btn:hover {
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    }
+        .panel .panel-heading .btn:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
 
-    .panel .panel-body {
-      border-radius: 0;
-    }
+        .panel .panel-body {
+            border-radius: 0;
+        }
 
-    .panel .panel-body .table thead tr th {
-      color: #333;
-      font-size: 19px;
-      font-weight: 400;
-      padding: 12px;
-    }
-    .panel .panel-body .table thead tr th:last-child {
-      width: 120px;
-    }
+        .panel .panel-body .table thead tr th {
+            color: #333;
+            font-size: 19px;
+            font-weight: 400;
+            padding: 12px;
+        }
 
-    .panel .panel-body .table tbody tr td {
-      color: #555;
-      background: #fff;
-      font-size: 15px;
-      font-weight: 500;
-      padding: 10px;
-      vertical-align: middle;
-      border-color: #e7e7e7;
-    }
+        .panel .panel-body .table thead tr th:last-child {
+            width: 120px;
+        }
 
-    .panel .panel-body .table .user_icon {
-      width: 50px;
-      height: 50px;
-      margin: 0 5px 0 0;
-      border-radius: 100px;
-      display: inline-block;
-    }
+        .panel .panel-body .table tbody tr td {
+            color: #555;
+            background: #fff;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 10px;
+            vertical-align: middle;
+            border-color: #e7e7e7;
+        }
 
-    .panel .panel-body .table .user_icon img {
-      width: 100%;
-      height: auto;
-      border-radius: 50%;
-    }
+        .panel .panel-body .table .user_icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 5px 0 0;
+            border-radius: 100px;
+            display: inline-block;
+        }
 
-    .panel .panel-body .table tbody td span.label {
-      font-size: 13px;
-    }
+        .panel .panel-body .table .user_icon img {
+            width: 100%;
+            height: auto;
+            border-radius: 50%;
+        }
 
-    .panel .panel-body .table tbody .action-list {
-      padding: 0;
-      margin: 0;
-      list-style: none;
-    }
+        .panel .panel-body .table tbody td span.label {
+            font-size: 13px;
+        }
 
-    .panel .panel-body .table tbody .action-list li {
-      margin: 0 3px;
-      display: inline-block;
-    }
+        .panel .panel-body .table tbody .action-list {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
 
-    .panel .panel-body .table tbody .action-list li a {
-      color: #f41127;
-      background-color: rgb(244 17 39 / 0.11);
-      font-size: 18px;
-      border: none;
-      transition: all 0.3s ease;
-    }
+        .panel .panel-body .table tbody .action-list li {
+            margin: 0 3px;
+            display: inline-block;
+        }
 
-    .panel .panel-body .table tbody .action-list li:last-child a {
-      color: #0d6efd;
-      background-color: rgb(13 110 253 / 0.11);
-    }
+        .panel .panel-body .table tbody .action-list li a {
+            color: #f41127;
+            background-color: rgb(244 17 39 / 0.11);
+            font-size: 18px;
+            border: none;
+            transition: all 0.3s ease;
+        }
 
-    .panel .panel-body .table tbody .action-list li a:hover {
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-    }
+        .panel .panel-body .table tbody .action-list li:last-child a {
+            color: #0d6efd;
+            background-color: rgb(13 110 253 / 0.11);
+        }
 
-    .panel .panel-footer {
-      background-color: #fff;
-      padding: 10px 25px 25px;
-      border: none;
-    }
+        .panel .panel-body .table tbody .action-list li a:hover {
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
 
-    .pagination {
-      margin: 0;
-    }
+        .panel .panel-footer {
+            background-color: #fff;
+            padding: 10px 25px 25px;
+            border: none;
+        }
 
-    .pagination li a {
-      color: #999;
-      font-size: 14px;
-      font-weight: 500;
-      text-align: center;
-      line-height: 32px;
-      width: 30px;
-      height: 30px;
-      padding: 0;
-      margin: 0 2px;
-      border-radius: 30px;
-      border: none;
-      transition: all 0.3s ease 0s;
-    }
+        .pagination {
+            margin: 0;
+        }
 
-    .pagination li a:hover,
-    .pagination li a:focus,
-    .pagination li.active a {
-      color: #fff;
-      background-color: #286090;
-    }
+        .pagination li a {
+            color: #999;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            line-height: 32px;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            margin: 0 2px;
+            border-radius: 30px;
+            border: none;
+            transition: all 0.3s ease 0s;
+        }
 
-    .pagination li:first-child a,
-    .pagination li:last-child a {
-      border-radius: 50%;
-    }
+        .pagination li a:hover,
+        .pagination li a:focus,
+        .pagination li.active a {
+            color: #fff;
+            background-color: #286090;
+        }
 
-    @media only screen and (max-width: 767px) {
-      .panel .panel-heading {
-        text-align: center;
-      }
+        .pagination li:first-child a,
+        .pagination li:last-child a {
+            border-radius: 50%;
+        }
 
-      .panel .panel-heading .title {
-        margin: 0 0 15px;
-      }
+        @media only screen and (max-width: 767px) {
+            .panel .panel-heading {
+                text-align: center;
+            }
 
-      .panel .panel-heading .text-right {
-        text-align: center;
-      }
-    }
+            .panel .panel-heading .title {
+                margin: 0 0 15px;
+            }
 
-    .footer {
-      padding: 25px 60px;
-      background-color: #ccd7d9;
-    }
+            .panel .panel-heading .text-right {
+                text-align: center;
+            }
+        }
 
-    .navbar {
-      padding: 0 50px;
-      background-color: #eaeeee;
-    }
+        .footer {
+            padding: 25px 60px;
+            background-color: #ccd7d9;
+        }
 
-    .form-group {
-      padding: 5px;
-    }
-  </style>
+        .navbar {
+            padding: 0 50px;
+            background-color: #eaeeee;
+        }
+
+        .form-group {
+            padding: 5px;
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            cursor: pointer;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #007bff;
+            border: 1px solid #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #0056b3;
+        }
+
+        #file {
+            display: none;
+        }
+
+        .error-message {
+            color: red;
+            display: none;
+        }
+
+        .file-preview img {
+            max-width: 300px;
+            max-height: 300px;
+            margin-top: 10px;
+            margin-bottom: 25px;
+        }
+
+    </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-  <!-- Navbar -->
-  <div class="navbar">
-    <nav class="navbar navbar-expand navbar-white navbar-light">
-      <!-- Left navbar links -->
-      <ul class="navbar-nav">
-        <li class="nav-item d-none d-sm-inline-block">
-          <a href="/products" class="nav-link">
-            <i class="fas fa-home fa-2x"></i>
-            Trang Danh Sách
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-  <!-- /.navbar -->
-
-  <section class="content">
-    <div class="container">
-      <h1 class="mb-4 text-center">Cập nhật sản phẩm</h1>
-
-      <form class="panel-body" th:action="@{/products/update/{id}(id=${product.id})}" method="POST" th:object="${product}" enctype="multipart/form-data">
-        <div class="row">
-          <!-- Left Column -->
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="name">Tên sản phẩm<span style="color: red;">*</span></label>
-              <input type="text" id="name" name="name" class="form-control" th:value="*{name}" required>
-            </div>
-            <div class="form-group">
-              <label for="quantity">Số lượng<span style="color: red;">*</span></label>
-              <input type="number" id="quantity" name="quantity" class="form-control" th:value="*{quantity}" required>
-            </div>
-            <div class="form-group">
-              <label for="price">Giá<span style="color: red;">*</span></label>
-              <input type="number" step="0.01" id="price" name="price" class="form-control" th:value="*{price}" required>
-            </div>
-            <div class="form-group">
-              <label for="discount">Giảm giá<span style="color: red;">*</span></label>
-              <input type="number" id="discount" name="discount" class="form-control" th:value="*{discount}" required>
-            </div>
-            <div class="form-group">
-              <label for="operatingSystem">Hệ điều hành<span style="color: red;">*</span></label>
-              <input type="text" id="operatingSystem" name="operatingSystem" class="form-control" th:value="*{productDetail.operatingSystem}" required>
-            </div>
-            <div class="form-group">
-              <label for="specialFeatures">Tính năng đặc biệt</label>
-              <input type="text" id="specialFeatures" name="specialFeatures" class="form-control" th:value="*{productDetail.specialFeatures}">
-            </div>
-            <div class="form-group">
-              <label for="systemRequirements">Yêu cầu hệ thống</label>
-              <input type="text" id="systemRequirements" name="systemRequirements" class="form-control" th:value="*{productDetail.systemRequirements}">
-            </div>
-
-            <div class="form-group">
-              <label for="screen">Màn hình</label>
-              <input type="text" id="screen" name="screen" class="form-control" th:value="*{productDetail.screen}">
-            </div>
-            <div class="form-group">
-              <label for="screenResolution">Độ phân giải màn hình</label>
-              <input type="text" id="screenResolution" name="screenResolution" class="form-control" th:value="*{productDetail.screenResolution}">
-            </div>
-            <div class="form-group">
-              <label for="category">Danh mục<span style="color: red;">*</span></label>
-              <select id="category" name="category" class="form-control">
-                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="*{category.id == category.id}"></option>
-              </select>
-            </div>
-            <div class="form-group">
-              <input type="file" id="file" name="file" class="form-control-file">
-            </div>
-          </div>
-          <!-- Right Column -->
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="color" >Màu sắc</label>
-              <select id="color" name="color" class="form-control">
-                <option th:each="color : ${colors}" th:value="${color}" th:text="${color}" th:selected="${color} == ${product.productDetail.color}"></option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="waterAndDustResistance">Khả năng chống nước và bụi</label>
-              <input type="text" id="waterAndDustResistance" name="waterAndDustResistance" class="form-control" th:value="*{productDetail.waterAndDustResistance}">
-            </div>
-            <div class="form-group">
-              <label for="chip">Chip</label>
-              <select id="chip" name="chip" class="form-control" th:value="*{productDetail.chip}">
-                <option th:each="chip : ${chips}" th:value="${chip}" th:text="${chip}" th:selected="${chip} == ${product.productDetail.chip}"></option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="storage">Bộ nhớ lưu trữ</label>
-              <select id="storage" name="storage" class="form-control" th:value="*{productDetail.storage}">
-                <option th:each="storege : ${storages}" th:value="${storege}" th:text="${storege}" th:selected="${storege} == ${product.productDetail.storage}"></option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="dimensionsAndWeight">Kích thước và trọng lượng</label>
-              <select id="dimensionsAndWeight" name="dimensionsAndWeight" class="form-control" th:value="*{productDetail.dimensionsAndWeight}">
-                <option th:each="dimensionsAndWeight : ${dimensionsAndWeights}" th:value="${dimensionsAndWeight}" th:text="${dimensionsAndWeight}" th:selected="${dimensionsAndWeight} == ${product.productDetail.dimensionsAndWeight}"></option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="rearCamera">Camera Phía Sau</label>
-              <select id="rearCamera" name="rearCamera" class="form-control" th:value="*{productDetail.rearCamera}">
-                <option th:each="rearCamera : ${rearCameras}" th:value="${rearCamera}" th:text="${rearCamera}" th:selected="${rearCamera} == ${product.productDetail.rearCamera}"></option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="frontCamera">Camera Phía Trước</label>
-              <select id="frontCamera" name="frontCamera" class="form-control" th:value="*{productDetail.frontCamera}">
-                <option th:each="frontCamera : ${frontCameras}" th:value="${frontCamera}" th:text="${frontCamera}" th:selected="${frontCamera} == ${product.productDetail.frontCamera}"></option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="videoRecording">Quay Video</label>
-              <select id="videoRecording" name="videoRecording" class="form-control" th:value="*{productDetail.videoRecording}">
-                <option th:each="videoRecording : ${videoRecordings}" th:value="${videoRecording}" th:text="${videoRecording}" th:selected="${videoRecording} == ${product.productDetail.videoRecording}"></option>
-              </select>
-            </div>
-
-            <script>
-              populateDropdown("chip", chips);
-              populateDropdown("color",colors)
-              populateDropdown("operatingSystem", operatingSystems);
-              populateDropdown("storage", storages);
-              populateDropdown("dimensionsAndWeight", dimensionsAndWeights);
-              populateDropdown("rearCamera", rearCameras);
-              populateDropdown("frontCamera", frontCameras);
-              populateDropdown("videoRecording", videoRecordingOptions);
-              // lấy option của color hoặc storage
-
-              function populateDropdown(id, options) {
-                var select = document.getElementById(id);
-
-                for (var i = 0; i < options.length; i++) {
-                  var option = document.createElement("option");
-                  option.text = options[i];
-                  option.value = options[i];
-                  select.add(option);
-                }
-                document.getElementById("file").addEventListener("change", function(event) {
-                  var fileInput = this;
-                  var filePreview = document.getElementById("file-preview");
-                  var errorMessage = document.getElementById("error-message");
-                  var successMessage = document.getElementById("success-message");
-
-                  // Xóa bỏ hình ảnh cũ và thông báo thành công (nếu có)
-                  filePreview.innerHTML = "";
-                  successMessage.textContent = "";
-                  errorMessage.textContent = "";
-
-                  // Kiểm tra nếu có tệp ảnh được chọn
-                  if (!fileInput.files || fileInput.files.length === 0) {
-                    errorMessage.textContent = "Vui lòng chọn ảnh.";
-                    event.preventDefault();
-                  } else {
-                    successMessage.textContent = "Ảnh đã được chọn thành công.";
-                  }
-
-                });
-              }
-            </script>
-            <div class="form-group">
-              <label for="security">Bảo mật</label>
-              <input type="text" id="security" name="security" class="form-control" th:value="*{productDetail.security}">
-            </div>
-            <div class="form-group">
-              <label for="networkConnectivity">Kết nối mạng</label>
-              <input type="text" id="networkConnectivity" name="networkConnectivity" class="form-control" th:value="*{productDetail.networkConnectivity}">
-            </div>
-            <div class="form-group">
-              <label for="audioTechnology">Công nghệ âm thanh</label>
-              <input type="text" id="audioTechnology" name="audioTechnology" class="form-control" th:value="*{productDetail.audioTechnology}">
-            </div>
-            <div class="form-group">
-              <label for="videoViewing">Xem video</label>
-              <input type="text" id="videoViewing" name="videoViewing" class="form-control" th:value="*{productDetail.videoViewing}">
-            </div>
-            <div class="form-group">
-              <label for="charging">Sạc</label>
-              <input type="text" id="charging" name="charging" class="form-control" th:value="*{productDetail.charging}">
-            </div>
-            <div class="form-group">
-              <label for="batteryAndPower">Pin và nguồn</label>
-              <input type="text" id="batteryAndPower" name="batteryAndPower" class="form-control" th:value="*{productDetail.batteryAndPower}">
-            </div>
-            <div class="form-group">
-              <label for="sensors">Cảm biến</label>
-              <input type="text" id="sensors" name="sensors" class="form-control" th:value="*{productDetail.sensors}">
-            </div>
-            <div class="form-group">
-              <label for="sim">Sim</label>
-              <input type="text" id="sim" name="sim" class="form-control" th:value="*{productDetail.sim}">
-            </div>
-            <div class="form-group">
-              <label for="description">Mô tả<span style="color: red;">*</span></label>
-              <textarea id="description" name="description" class="form-control" required th:text="*{description}"></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="text-center">
-          <button type="submit" class="btn btn-primary mt-4">Cập nhật sản phẩm</button>
-        </div>
-      </form>
+    <!-- Navbar -->
+    <div class="navbar">
+        <nav class="navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="/products" class="nav-link">
+                        <i class="fas fa-home fa-2x"></i>
+                        Trang Danh Sách
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
-  </section>
-  <!-- /.content -->
+    <!-- /.navbar -->
+
+    <section class="content">
+        <div class="container">
+            <h1 class="mb-4 text-center">Cập nhật sản phẩm</h1>
+
+            <form class="panel-body" th:action="@{/products/update/{id}(id=${product.id})}" method="POST"
+                  th:object="${product}" enctype="multipart/form-data">
+                <div class="row">
+                    <!-- Left Column -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="name">Tên sản phẩm<span style="color: red;">*</span></label>
+                            <input type="text" id="name" name="name" class="form-control" th:value="*{name}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Số lượng<span style="color: red;">*</span></label>
+                            <input type="number" id="quantity" name="quantity" class="form-control"
+                                   th:value="*{quantity}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Giá<span style="color: red;">*</span></label>
+                            <input type="number" step="0.01" id="price" name="price" class="form-control"
+                                   th:value="*{price}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="discount">Giảm giá<span style="color: red;">*</span></label>
+                            <input type="number" id="discount" name="discount" class="form-control"
+                                   th:value="*{discount}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="operatingSystem">Hệ điều hành<span style="color: red;">*</span></label>
+                            <input type="text" id="operatingSystem" name="operatingSystem" class="form-control"
+                                   th:value="*{productDetail.operatingSystem}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="specialFeatures">Tính năng đặc biệt</label>
+                            <input type="text" id="specialFeatures" name="specialFeatures" class="form-control"
+                                   th:value="*{productDetail.specialFeatures}">
+                        </div>
+                        <div class="form-group">
+                            <label for="systemRequirements">Yêu cầu hệ thống</label>
+                            <input type="text" id="systemRequirements" name="systemRequirements" class="form-control"
+                                   th:value="*{productDetail.systemRequirements}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="screen">Màn hình</label>
+                            <select id="screen" name="screenResolution" class="form-control"
+                                    th:value="*{productDetail.screen}">
+                                <option th:each="screen : ${screens}" th:value="${screen}"
+                                        th:text="${screen}"
+                                        th:selected="${screen} == ${product.productDetail.screen}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="screenResolution">Độ phân giải màn hình</label>
+                            <select id="screenResolution" name="screenResolution" class="form-control"
+                                    th:value="*{productDetail.screenResolution}">
+                                <option th:each="screenResolution : ${screenResolutions}" th:value="${screenResolution}"
+                                        th:text="${screenResolution}"
+                                        th:selected="${screenResolution} == ${product.productDetail.screenResolution}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Danh mục<span style="color: red;">*</span></label>
+                            <select id="category" name="category" class="form-control">
+                                <option th:each="category : ${categories}" th:value="${category.id}"
+                                        th:text="${category.name}" th:selected="*{category.id == category.id}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="file" id="file" name="file" class="form-control-file">
+                            <span id="error-file" class="error-message">Vui lòng chọn một tệp ảnh.</span>
+                            <div id="file-preview" class="file-preview"></div>
+                            <p id="success-message" class="text-success"></p>
+                            <p id="error-message"></p>
+                            <label for="file" class="custom-file-upload">
+                                <i class="fas fa-cloud-upload-alt"></i> Chọn ảnh
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="color">Màu sắc</label>
+                            <select id="color" name="color" class="form-control">
+                                <option th:each="color : ${colors}" th:value="${color}" th:text="${color}"
+                                        th:selected="${color} == ${product.productDetail.color}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="waterAndDustResistance">Khả năng chống nước và bụi</label>
+                            <input type="text" id="waterAndDustResistance" name="waterAndDustResistance"
+                                   class="form-control" th:value="*{productDetail.waterAndDustResistance}">
+                        </div>
+                        <div class="form-group">
+                            <label for="chip">Chip</label>
+                            <select id="chip" name="chip" class="form-control" th:value="*{productDetail.chip}">
+                                <option th:each="chip : ${chips}" th:value="${chip}" th:text="${chip}"
+                                        th:selected="${chip} == ${product.productDetail.chip}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="storage">Bộ nhớ lưu trữ</label>
+                            <select id="storage" name="storage" class="form-control"
+                                    th:value="*{productDetail.storage}">
+                                <option th:each="storege : ${storages}" th:value="${storege}" th:text="${storege}"
+                                        th:selected="${storege} == ${product.productDetail.storage}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dimensionsAndWeight">Kích thước và trọng lượng</label>
+                            <select id="dimensionsAndWeight" name="dimensionsAndWeight" class="form-control"
+                                    th:value="*{productDetail.dimensionsAndWeight}">
+                                <option th:each="dimensionsAndWeight : ${dimensionsAndWeights}"
+                                        th:value="${dimensionsAndWeight}" th:text="${dimensionsAndWeight}"
+                                        th:selected="${dimensionsAndWeight} == ${product.productDetail.dimensionsAndWeight}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rearCamera">Camera Phía Sau</label>
+                            <select id="rearCamera" name="rearCamera" class="form-control"
+                                    th:value="*{productDetail.rearCamera}">
+                                <option th:each="rearCamera : ${rearCameras}" th:value="${rearCamera}"
+                                        th:text="${rearCamera}"
+                                        th:selected="${rearCamera} == ${product.productDetail.rearCamera}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="frontCamera">Camera Phía Trước</label>
+                            <select id="frontCamera" name="frontCamera" class="form-control"
+                                    th:value="*{productDetail.frontCamera}">
+                                <option th:each="frontCamera : ${frontCameras}" th:value="${frontCamera}"
+                                        th:text="${frontCamera}"
+                                        th:selected="${frontCamera} == ${product.productDetail.frontCamera}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="videoRecording">Quay Video</label>
+                            <select id="videoRecording" name="videoRecording" class="form-control"
+                                    th:value="*{productDetail.videoRecording}">
+                                <option th:each="videoRecording : ${videoRecordings}" th:value="${videoRecording}"
+                                        th:text="${videoRecording}"
+                                        th:selected="${videoRecording} == ${product.productDetail.videoRecording}"></option>
+                            </select>
+                        </div>
+
+                        <script>
+                            function validateForm() {
+                                var isValid = true;
+
+                                // Lấy giá trị của các trường nhập liệu
+                                var name = document.getElementById('name').value;
+                                var quantity = document.getElementById('quantity').value;
+                                var price = document.getElementById('price').value;
+                                var discount = document.getElementById('discount').value;
+                                var description = document.getElementById('description').value;
+                                var screenResolution = document.getElementById('screenResolution').value;
+                                var fileInput = document.getElementById('file').value;
+
+
+                                return isValid;  // Ngăn chặn việc gửi form nếu có lỗi
+                            }
+
+                            var colors = ["Xanh", "Đỏ", "Vàng"];
+                            var operatingSystems = ["Windows", "macOS", "Linux"];
+                            var chips = ["Intel", "AMD", "ARM"];
+                            var storages = ["32G", "64G", "128G", "256G", "521G", "1T"];
+                            var dimensionsAndWeights = ["150.9 x 75.7 x 8.3 mm  194g", "144 x 71.4 x 8.1 mm  188g", "158 x 77.8 x 8.1 mm  226g"];
+                            var rearCameras = ["12 MP", "16 MP", "20 MP"];
+                            var frontCameras = ["8 MP", "12 MP", "16 MP"];
+                            var videoRecordingOptions = ["1080p", "4K", "8K"];
+                            var screenResolutions = ["720p (HD)", "1080p (Full HD)", "1440p (Quad HD, 2K)", "2160p (Ultra HD, 4K)", "4320p (8K Ultra HD)"];
+
+                            //// thêm var cho đầy đủ  sau đó qua hàm update bên controller thêm như các trường mẫu đã thêm
+                            //sau đó qua update.html
+
+                            populateDropdown("color", colors)
+                            populateDropdown("operatingSystem", operatingSystems);
+                            populateDropdown("chip", chips);
+                            populateDropdown("storage", storages);
+                            populateDropdown("dimensionsAndWeight", dimensionsAndWeights);
+                            populateDropdown("rearCamera", rearCameras);
+                            populateDropdown("frontCamera", frontCameras);
+                            populateDropdown("videoRecording", videoRecordingOptions);
+                            populateDropdown("screenResolution", screenResolutions);
+
+                            function populateDropdown(id, options) {
+                                var select = document.getElementById(id);
+
+                                for (var i = 0; i < options.length; i++) {
+                                    var option = document.createElement("option");
+                                    option.text = options[i];
+                                    option.value = options[i];
+                                    select.add(option);
+                                }
+                                document.getElementById("file").addEventListener("change", function (event) {
+                                    var fileInput = this;
+                                    var filePreview = document.getElementById("file-preview");
+                                    var errorMessage = document.getElementById("error-message");
+                                    var successMessage = document.getElementById("success-message");
+
+                                    // Xóa bỏ hình ảnh cũ và thông báo thành công (nếu có)
+                                    filePreview.innerHTML = "";
+                                    successMessage.textContent = "";
+                                    errorMessage.textContent = "";
+
+                                    // Kiểm tra nếu có tệp ảnh được chọn
+                                    if (!fileInput.files || fileInput.files.length === 0) {
+                                        errorMessage.textContent = "Vui lòng chọn ảnh.";
+                                        event.preventDefault();
+                                    } else {
+                                        successMessage.textContent = "Ảnh đã được chọn thành công.";
+
+                                    }
+
+                                });
+                            }
+
+                        </script>
+                        <div class="form-group">
+                            <label for="security">Bảo mật</label>
+                            <input type="text" id="security" name="security" class="form-control"
+                                   th:value="*{productDetail.security}">
+                        </div>
+                        <div class="form-group">
+                            <label for="networkConnectivity">Kết nối mạng</label>
+                            <input type="text" id="networkConnectivity" name="networkConnectivity" class="form-control"
+                                   th:value="*{productDetail.networkConnectivity}">
+                        </div>
+                        <div class="form-group">
+                            <label for="audioTechnology">Công nghệ âm thanh</label>
+                            <input type="text" id="audioTechnology" name="audioTechnology" class="form-control"
+                                   th:value="*{productDetail.audioTechnology}">
+                        </div>
+                        <div class="form-group">
+                            <label for="videoViewing">Xem video</label>
+                            <input type="text" id="videoViewing" name="videoViewing" class="form-control"
+                                   th:value="*{productDetail.videoViewing}">
+                        </div>
+                        <div class="form-group">
+                            <label for="charging">Sạc</label>
+                            <input type="text" id="charging" name="charging" class="form-control"
+                                   th:value="*{productDetail.charging}">
+                        </div>
+                        <div class="form-group">
+                            <label for="batteryAndPower">Pin và nguồn</label>
+                            <input type="text" id="batteryAndPower" name="batteryAndPower" class="form-control"
+                                   th:value="*{productDetail.batteryAndPower}">
+                        </div>
+                        <div class="form-group">
+                            <label for="sensors">Cảm biến</label>
+                            <input type="text" id="sensors" name="sensors" class="form-control"
+                                   th:value="*{productDetail.sensors}">
+                        </div>
+                        <div class="form-group">
+                            <label for="sim">Sim</label>
+                            <input type="text" id="sim" name="sim" class="form-control" th:value="*{productDetail.sim}">
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Mô tả<span style="color: red;">*</span></label>
+                            <textarea id="description" name="description" class="form-control" required
+                                      th:text="*{description}"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary mt-4">Cập nhật sản phẩm</button>
+                </div>
+            </form>
+        </div>
+    </section>
+    <!-- /.content -->
 </div>
 
 
+<script>
+    function validateForm() {
+        var isValid = true;
+
+        var name = document.getElementById('name').value.trim();
+        var quantity = document.getElementById('quantity').value.trim();
+        var price = document.getElementById('price').value.trim();
+        var discount = document.getElementById('discount').value.trim();
+        var description = document.getElementById('description').value.trim();
+        var fileInput = document.getElementById('file');
+
+        // Validate name
+        if (name === '') {
+            document.getElementById('error-name').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('error-name').style.display = 'none';
+        }
+
+        // Validate quantity
+        if (quantity === '') {
+            document.getElementById('error-quantity').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('error-quantity').style.display = 'none';
+        }
+
+        // Validate price
+        if (price === '') {
+            document.getElementById('error-price').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('error-price').style.display = 'none';
+        }
+
+        // Validate discount
+        if (discount === '') {
+            document.getElementById('error-discount').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('error-discount').style.display = 'none';
+        }
+
+        // Validate description
+        if (description === '') {
+            document.getElementById('error-description').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('error-description').style.display = 'none';
+        }
+
+        // Validate file input
+        if (!fileInput.files || fileInput.files.length === 0) {
+            document.getElementById('error-file').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('error-file').style.display = 'none';
+        }
+
+        return isValid;
+    }
+
+    document.getElementById('file').addEventListener('change', function () {
+        var file = this.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var preview = document.getElementById('file-preview');
+                preview.innerHTML = '<img src="' + e.target.result + '" alt="Selected Image">';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+</script>
 <script src="/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
-  $.widget.bridge('uibutton', $.ui.button)
+    $.widget.bridge('uibutton', $.ui.button)
 </script>
 <!-- Bootstrap 4 -->
 <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>

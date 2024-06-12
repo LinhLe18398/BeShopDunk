@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -167,8 +168,7 @@ public class AdminController {
         product.setProductDetail(productDTO);
         product.setImage(uploadImage(imageFile));
         iProductRepository.save(product);
-
-        modelAndView.addObject("message", "Product created successfully.");
+        modelAndView.addObject("successMessage", "Cập nhật sản phẩm thành công.");
         modelAndView.setViewName("redirect:/products");
         return modelAndView;
     }
@@ -225,13 +225,14 @@ public class AdminController {
 
         Optional<Product> productOptional = iProductRepository.findById(id);
         if (!productOptional.isPresent()) {
-            modelAndView.addObject("error", "Product not found.");
+            modelAndView.addObject("error", "Không tìm thấy sản phẩm.");
             return modelAndView;
         }
+
         Product product = productOptional.get();
         Optional<Category> categoryOptional = iCategoryRepository.findById(categoryId);
         if (!categoryOptional.isPresent()) {
-            modelAndView.addObject("error", "Category not found.");
+            modelAndView.addObject("error", "Không tìm thấy danh mục.");
             return modelAndView;
         }
 
@@ -258,17 +259,20 @@ public class AdminController {
         productDetail.setSensors(sensors);
         productDetail.setSim(sim);
         iProductDetailRepository.save(productDetail);
+
         product.setName(name);
         product.setQuantity(quantity);
         product.setPrice(price);
         product.setDescription(description);
         product.setDiscount(discount);
         product.setCategory(categoryOptional.get());
+
         if (!imageFile.isEmpty()) {
             product.setImage(uploadImage(imageFile));
         }
+
         iProductRepository.save(product);
-        modelAndView.addObject("message", "Product updated successfully.");
+        modelAndView.addObject("successMessage", "Cập nhật sản phẩm thành công.");
         return modelAndView;
     }
 
@@ -284,12 +288,13 @@ public class AdminController {
             modelAndView.addObject("colors", Arrays.asList("Xanh", "Đỏ", "Vàng"));
             modelAndView.addObject("operatingSystem", Arrays.asList("Windows", "macOS", "Linux"));
             modelAndView.addObject("chips", Arrays.asList("Intel", "AMD", "ARM"));
-            modelAndView.addObject("storages",Arrays.asList("32G","64G","128G","256G","521G","1T"));
-            modelAndView.addObject("dimensionsAndWeights",Arrays.asList("","150.9 x 75.7 x 8.3 mm  194g","144 x 71.4 x 8.1 mm  188g","158 x 77.8 x 8.1 mm  226g"));
-            modelAndView.addObject("rearCameras",Arrays.asList("12 MP", "16 MP", "20 MP"));
-            modelAndView.addObject("frontCameras",Arrays.asList("8 MP", "12 MP", "16 MP"));
-            modelAndView.addObject("videoRecordings",Arrays.asList("1080p", "4K", "8K"));
-
+            modelAndView.addObject("storages", Arrays.asList("32G", "64G", "128G", "256G", "521G", "1T"));
+            modelAndView.addObject("dimensionsAndWeights", Arrays.asList("", "150.9 x 75.7 x 8.3 mm  194g", "144 x 71.4 x 8.1 mm  188g", "158 x 77.8 x 8.1 mm  226g"));
+            modelAndView.addObject("rearCameras", Arrays.asList("12 MP", "16 MP", "20 MP"));
+            modelAndView.addObject("frontCameras", Arrays.asList("8 MP", "12 MP", "16 MP"));
+            modelAndView.addObject("videoRecordings", Arrays.asList("1080p", "4K", "8K"));
+            modelAndView.addObject("screenResolutions", Arrays.asList("720p (HD)", "1080p (Full HD)", "1440p (Quad HD, 2K)","2160p (Ultra HD, 4K)","4320p (8K Ultra HD)"));
+            modelAndView.addObject("screens", Arrays.asList("LCD","LED","OLED","AMOLED","QLED","MicroLED","Plasma","E-Ink","TN","IPS","VA","Mini-LED"));
             modelAndView.addObject("categories", iCategoryRepository.findAll());
         } else {
             modelAndView.setViewName("redirect:/products");
@@ -298,49 +303,91 @@ public class AdminController {
         return modelAndView;
     }
 
-    @GetMapping("/search")
-    public ModelAndView searchProducts(@RequestParam(value = "name", required = false) String name,
-                                       @RequestParam(value = "price", required = false) Double price,
-                                       @RequestParam(value = "sortType", required = false) String sortType,
-                                       @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        ModelAndView modelAndView = new ModelAndView("index");
-        Page<Product> resultPage;
+        @GetMapping("/search")
+        public ModelAndView searchProducts(
+                @RequestParam(value = "name", required = false) String name,
+                @RequestParam(value = "priceRange", required = false) String priceRange,
+                @RequestParam(value = "sortType", required = false) String sortType,
+                @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        // Xác định sắp xếp
-        Sort sort = Sort.by("id").descending();
-        if ("priceAsc".equals(sortType)) {
-            sort = Sort.by("price").ascending();
-        } else if ("priceDesc".equals(sortType)) {
-            sort = Sort.by("price").descending();
-        }
+            ModelAndView modelAndView = new ModelAndView("index");
+            Page<Product> resultPage;
 
-        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-
-        if (name != null && !name.isEmpty() && price != null) {
-            resultPage = iProductRepository.findByNameContainingIgnoreCaseAndPrice(name, price, pageable);
-        } else if (name != null && !name.isEmpty()) {
-            resultPage = iProductRepository.findByNameContainingIgnoreCase(name, pageable);
-        } else if (price != null) {
-            if ("priceAsc".equals(sortType) || "priceDesc".equals(sortType)) {
-                resultPage = iProductRepository.findByPriceLessThanEqual(price, pageable);
-            } else {
-                resultPage = iProductRepository.findByPrice(price, pageable);
+            // Determine sorting
+            Sort sort = Sort.by("id").descending();
+            if ("priceAsc".equals(sortType)) {
+                sort = Sort.by("price").ascending();
+            } else if ("priceDesc".equals(sortType)) {
+                sort = Sort.by("price").descending();
             }
-        } else {
-            resultPage = iProductRepository.findAll(pageable);
+
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+            Double minPrice = null;
+            Double maxPrice = null;
+
+            // Determine price range
+            if (priceRange != null && !priceRange.isEmpty()) {
+                switch (priceRange) {
+                    case "below5":
+                        maxPrice = 5000000.0;
+                        break;
+                    case "5to10":
+                        minPrice = 5000000.0;
+                        maxPrice = 10000000.0;
+                        break;
+                    case "10to15":
+                        minPrice = 10000000.0;
+                        maxPrice = 15000000.0;
+                        break;
+                    case "15to20":
+                        minPrice = 15000000.0;
+                        maxPrice = 20000000.0;
+                        break;
+                    case "20to30":
+                        minPrice = 20000000.0;
+                        maxPrice = 30000000.0;
+                        break;
+                    case "above30":
+                        minPrice = 30000000.0;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            // Construct the query based on provided parameters
+            if (name != null && !name.isEmpty() && minPrice != null && maxPrice != null) {
+                resultPage = iProductRepository.findByNameContainingIgnoreCaseAndPriceBetween(name, minPrice, maxPrice, pageable);
+            } else if (name != null && !name.isEmpty() && minPrice != null) {
+                resultPage = iProductRepository.findByNameContainingIgnoreCaseAndPriceGreaterThanEqual(name, minPrice, pageable);
+            } else if (name != null && !name.isEmpty() && maxPrice != null) {
+                resultPage = iProductRepository.findByNameContainingIgnoreCaseAndPriceLessThanEqual(name, maxPrice, pageable);
+            } else if (name != null && !name.isEmpty()) {
+                resultPage = iProductRepository.findByNameContainingIgnoreCase(name, pageable);
+            } else if (minPrice != null && maxPrice != null) {
+                resultPage = iProductRepository.findByPriceBetween(minPrice, maxPrice, pageable);
+            } else if (minPrice != null) {
+                resultPage = iProductRepository.findByPriceGreaterThanEqual(minPrice, pageable);
+            } else if (maxPrice != null) {
+                resultPage = iProductRepository.findByPriceLessThanEqual(maxPrice, pageable);
+            } else {
+                resultPage = iProductRepository.findAll(pageable);
+            }
+
+            // Check if results are empty and return a different view if so
+            if (resultPage.isEmpty()) {
+                ModelAndView noResultsModelAndView = new ModelAndView("no-results");
+                noResultsModelAndView.addObject("message", "Không tìm thấy kết quả.");
+                return noResultsModelAndView;
+            }
+
+            modelAndView.addObject("listProduct", resultPage);
+            modelAndView.addObject("name", name);
+            modelAndView.addObject("priceRange", priceRange);
+            modelAndView.addObject("sortType", sortType);
+
+            return modelAndView;
         }
 
-        if (resultPage.isEmpty()) {
-            modelAndView.addObject("message", "Không tìm thấy kết quả.");
-        }
-
-        modelAndView.addObject("listProduct", resultPage);
-        modelAndView.addObject("name", name);
-        modelAndView.addObject("price", price);
-        modelAndView.addObject("sortType", sortType);
-
-        return modelAndView;
     }
-
-
-}

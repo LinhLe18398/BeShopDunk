@@ -22,7 +22,17 @@ public interface IProductRepository extends JpaRepository<Product,Long> {
 
     List<Product> findByCategoryId(long id);
 
-    Page<Product> findByNameContainingIgnoreCaseAndPrice(String name, Double price, Pageable pageable);
+//    Page<Product> findByNameContainingIgnoreCaseAndPrice(String name, Double price, Pageable pageable);
+//
+//    Page<Product> findByPrice(Double price, Pageable pageable);
 
-    Page<Product> findByPrice(Double price, Pageable pageable);
+    Page<Product> findByNameContainingIgnoreCaseAndPriceBetween(String name, Double minPrice, Double maxPrice, Pageable pageable);
+
+    Page<Product> findByNameContainingIgnoreCaseAndPriceGreaterThanEqual(String name, Double minPrice, Pageable pageable);
+
+    Page<Product> findByNameContainingIgnoreCaseAndPriceLessThanEqual(String name, Double maxPrice, Pageable pageable);
+
+    Page<Product> findByPriceBetween(Double minPrice, Double maxPrice, Pageable pageable);
+
+    Page<Product> findByPriceGreaterThanEqual(Double minPrice, Pageable pageable);
 }

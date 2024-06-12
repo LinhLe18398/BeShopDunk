@@ -238,6 +238,13 @@
             color: red;
             display: none;
         }
+        .file-preview img {
+            max-width: 300px;
+            max-height: 300px;
+            margin-top: 10px;
+            margin-bottom: 25px;
+        }
+
     </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -292,7 +299,7 @@
                         </div>
                         <div class="form-group">
                             <label for="description">Mô tả<span style="color: red;">*</span></label>
-                            <input id="description" name="description" class="form-control" required>
+                            <input id="description" name="description" class="form-control" >
                             <span id="error-description" class="error-message">Vui lòng nhập mô tả.</span>
                         </div>
                         <div class="form-group">
@@ -310,11 +317,12 @@
                         </div>
                         <div class="form-group">
                             <label for="screen">Màn hình</label>
-                            <input type="text" id="screen" name="screen" class="form-control">
+                            <select id="screen" name="screen" class="form-control"></select>
+
                         </div>
                         <div class="form-group">
                             <label for="screenResolution">Độ phân giải màn hình</label>
-                            <input type="text" id="screenResolution" name="screenResolution" class="form-control">
+                            <select id="screenResolution" name="screenResolution" class="form-control"></select>
                         </div>
                         <div class="form-group">
                             <label for="category">Danh mục<span style="color: red;">*</span></label>
@@ -324,14 +332,14 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="file" class="custom-file-upload">
-                                <i class="fas fa-cloud-upload-alt"></i> Chọn ảnh
-                            </label>
                             <input type="file" id="file" name="file" class="form-control-file">
+                            <span id="error-file" class="error-message">Vui lòng chọn một tệp ảnh.</span>
                             <div id="file-preview" class="file-preview"></div>
                             <p id="success-message" class="text-success"></p>
                             <p id="error-message"></p>
-                            <span id="error-file" class="error-message">Vui lòng chọn một tệp ảnh.</span>
+                            <label for="file" class="custom-file-upload">
+                                <i class="fas fa-cloud-upload-alt"></i> Chọn ảnh
+                            </label>
                         </div>
 
                     </div>
@@ -388,50 +396,10 @@
                                 var discount = document.getElementById('discount').value;
                                 var description = document.getElementById('description').value;
                                 var fileInput = document.getElementById('file').value;
-
-                                // Kiểm tra và hiển thị thông báo lỗi cho từng trường
-                                if (name.trim() === "") {
-                                    document.getElementById('error-name').style.display = 'block';
-                                    isValid = false;
-                                } else {
-                                    document.getElementById('error-name').style.display = 'none';
-                                }
+                                var screenResolution = document.getElementById('screenResolutions').value;
+                                var screen = document.getElementById('screens').value;
 
 
-                                if (quantity.trim() === "") {
-                                    document.getElementById('error-quantity').style.display = 'block';
-                                    isValid = false;
-                                } else {
-                                    document.getElementById('error-quantity').style.display = 'none';
-                                }
-                                if (price.trim() === "") {
-                                    document.getElementById('error-price').style.display = 'block';
-                                    isValid = false;
-                                } else {
-                                    document.getElementById('error-price').style.display = 'none';
-                                }
-
-                                if (discount.trim() === "") {
-                                    document.getElementById('error-discount').style.display = 'block';
-                                    isValid = false;
-                                } else {
-                                    document.getElementById('error-discount').style.display = 'none';
-                                }
-                                if (description.trim() === "") {
-                                    document.getElementById('error-description').style.display = 'block';
-                                    isValid = false;
-                                } else {
-                                    document.getElementById('error-description').style.display = 'none';
-                                }
-
-
-
-                                if (fileInput.files.length === 0) {
-                                    document.getElementById('error-file').style.display = 'block';
-                                    isValid = false;
-                                } else {
-                                    document.getElementById('error-file').style.display = 'none';
-                                }
 
                                 return isValid;  // Ngăn chặn việc gửi form nếu có lỗi
                             }
@@ -443,6 +411,8 @@
                             var rearCameras = ["12 MP", "16 MP", "20 MP"];
                             var frontCameras = ["8 MP", "12 MP", "16 MP"];
                             var videoRecordingOptions = ["1080p", "4K", "8K"];
+                            var screenResolutions = ["720p (HD)", "1080p (Full HD)", "1440p (Quad HD, 2K)","2160p (Ultra HD, 4K)","4320p (8K Ultra HD)"];
+                            var screens = ["LCD","LED","OLED","AMOLED","QLED","MicroLED","Plasma","E-Ink","TN","IPS","VA","Mini-LED"];
 
                             //// thêm var cho đầy đủ  sau đó qua hàm update bên controller thêm như các trường mẫu đã thêm
                             //sau đó qua update.html
@@ -455,6 +425,8 @@
                             populateDropdown("rearCamera", rearCameras);
                             populateDropdown("frontCamera", frontCameras);
                             populateDropdown("videoRecording", videoRecordingOptions);
+                            populateDropdown("screenResolution", screenResolutions);
+                            populateDropdown("screen", screens);
 
                             function populateDropdown(id, options) {
                                 var select = document.getElementById(id);
@@ -531,7 +503,81 @@
     </section>
     <!-- /.content -->
 </div>
+<script>
+    function validateForm() {
+        var isValid = true;
 
+        var name = document.getElementById('name').value.trim();
+        var quantity = document.getElementById('quantity').value.trim();
+        var price = document.getElementById('price').value.trim();
+        var discount = document.getElementById('discount').value.trim();
+        var description = document.getElementById('description').value.trim();
+        var fileInput = document.getElementById('file');
+
+        // Validate name
+        if (name === '') {
+            document.getElementById('error-name').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('error-name').style.display = 'none';
+        }
+
+        // Validate quantity
+        if (quantity === '') {
+            document.getElementById('error-quantity').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('error-quantity').style.display = 'none';
+        }
+
+        // Validate price
+        if (price === '') {
+            document.getElementById('error-price').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('error-price').style.display = 'none';
+        }
+
+        // Validate discount
+        if (discount === '') {
+            document.getElementById('error-discount').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('error-discount').style.display = 'none';
+        }
+
+        // Validate description
+        if (description === '') {
+            document.getElementById('error-description').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('error-description').style.display = 'none';
+        }
+
+        // Validate file input
+        if (!fileInput.files || fileInput.files.length === 0) {
+            document.getElementById('error-file').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('error-file').style.display = 'none';
+        }
+
+        return isValid;
+    }
+
+    document.getElementById('file').addEventListener('change', function () {
+        var file = this.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var preview = document.getElementById('file-preview');
+                preview.innerHTML = '<img src="' + e.target.result + '" alt="Selected Image">';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+</script>
 
 <script src="/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->

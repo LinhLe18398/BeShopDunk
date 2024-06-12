@@ -94,6 +94,19 @@ public class ProductApi {
         return new ResponseEntity<>(cartItems, HttpStatus.OK);
     }
 
-
+    @GetMapping("/findProductsByCategory/{categoryId}")
+    public List<Product> findProductsByCategory(@PathVariable Long categoryId) {
+        return productService.findProductsByCategory(categoryId);
+    }
+    @DeleteMapping("/removeFromCart/{id}")
+    public ResponseEntity<?> removeFromCart(@PathVariable long id) {
+        Optional<Cart> cartItemOptional = iCartRepository.findById(id);
+        if (cartItemOptional.isPresent()) {
+            iCartRepository.delete(cartItemOptional.get());
+            return ResponseEntity.ok("Product removed from cart successfully.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }

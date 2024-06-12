@@ -95,4 +95,8 @@ public class ProductService implements IProductService {
     public List<Product> findByNameContainingAndPriceGreaterThanEqual(String name, BigDecimal price) {
         return null;
     }
+
+    public List<Product> findProductsByCategory(Long categoryId) {
+        return iProductRepository.findByCategoryId(categoryId);
+    }
 }
