@@ -53,47 +53,44 @@ public class ProductApi {
         }
     }
 
-    @PostMapping("/addToCart/{productId}")
-    public ResponseEntity<String> addProductToCart(@PathVariable long productId, @RequestParam int quantity) {
+    @PostMapping("/addToCart/{productId}/{name}")
+    public ResponseEntity<String> addProductToCart(@PathVariable String name, @PathVariable long productId, @RequestParam int quantity) {
         Optional<Product> productOptional = iProductRepository.findById(productId);
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
-            // Assume user is logged in and identified by userId
-            long userId = 1L; // Replace with the actual user ID
-            Optional<User> userOptional = userRepository.findById(userId);
+            Optional<User> userOptional = userRepository.findByUserName(name);
             if (userOptional.isPresent()) {
                 User user = userOptional.get();
-
-                // Check if the product already exists in the cart for the user
-                Optional<Cart> existingCartItemOptional = iCartRepository.findByProductIdAndUserId(productId, userId);
+                Optional<Cart> existingCartItemOptional = iCartRepository.findByProductIdAndUserId(productId, user.getId());
                 if (existingCartItemOptional.isPresent()) {
-                    // If the product already exists in the cart, update the quantity
                     Cart existingCartItem = existingCartItemOptional.get();
                     existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
                     iCartRepository.save(existingCartItem);
-                    return ResponseEntity.ok("Quantity updated in cart.");
+                    return ResponseEntity.ok("Số lượng đã được cập nhật trong giỏ hàng.");
                 } else {
-                    // Otherwise, create a new cart entry
-                    Cart cartItem = new Cart(product, user, quantity); // Set the product, user, and quantity
+                    Cart cartItem = new Cart(product, user, quantity);
                     iCartRepository.save(cartItem);
-                    return ResponseEntity.ok("Product added to cart successfully.");
+                    return ResponseEntity.ok("Sản phẩm đã được thêm vào giỏ hàng thành công.");
                 }
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không tìm thấy người dùng.");
             }
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy sản phẩm.");
         }
     }
 
-
-
-    @GetMapping("/cart")
-    public ResponseEntity<List<Cart>> getCartItems() {
-        List<Cart> cartItems = iCartRepository.findAll();
-        return new ResponseEntity<>(cartItems, HttpStatus.OK);
+    @GetMapping("/cart/{username}")
+    public ResponseEntity<?> getCartByUser(@PathVariable String username) {
+        Optional<User> userOptional = userRepository.findByUserName(username);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            List<Cart> cartItems = iCartRepository.findByUserId(user.getId());
+            return ResponseEntity.ok(cartItems);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy người dùng.");
+        }
     }
-
     @GetMapping("/findProductsByCategory/{categoryId}")
     public List<Product> findProductsByCategory(@PathVariable Long categoryId) {
         return productService.findProductsByCategory(categoryId);
@@ -103,9 +100,22 @@ public class ProductApi {
         Optional<Cart> cartItemOptional = iCartRepository.findById(id);
         if (cartItemOptional.isPresent()) {
             iCartRepository.delete(cartItemOptional.get());
-            return ResponseEntity.ok("Product removed from cart successfully.");
+            return ResponseEntity.ok("Sản phẩm đã được xóa khỏi giỏ hàng thành công.");
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/updateCart/{id}")
+    public ResponseEntity<?> updateCartItemQuantity(@PathVariable long id, @RequestParam int quantity) {
+        Optional<Cart> cartItemOptional = iCartRepository.findById(id);
+        if (cartItemOptional.isPresent()) {
+            Cart cartItem = cartItemOptional.get();
+            cartItem.setQuantity(quantity);
+            iCartRepository.save(cartItem);
+            return ResponseEntity.ok("Số lượng đã được cập nhật trong giỏ hàng.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy mặt hàng trong giỏ hàng.");
         }
     }
 

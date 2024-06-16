@@ -287,10 +287,9 @@
                         </div>
                         <div class="form-group">
                             <label for="price">Giá<span style="color: red;">*</span></label>
-                            <input type="number" step="0.01" id="price" name="price" class="form-control" >
+                            <input type="text" id="price" name="price" class="form-control"
+                                   th:value="*{getFormattedPrice()}" required>
                             <span id="error-price" class="error-message">Vui lòng nhập giá.</span>
-
-
                         </div>
                         <div class="form-group">
                             <label for="discount">Giảm giá<span style="color: red;">*</span></label>
@@ -323,6 +322,22 @@
                         <div class="form-group">
                             <label for="screenResolution">Độ phân giải màn hình</label>
                             <select id="screenResolution" name="screenResolution" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="security">Bảo mật</label>
+                            <input type="text" id="security" name="security" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="networkConnectivity">Kết nối mạng</label>
+                            <input type="text" id="networkConnectivity" name="networkConnectivity" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="audioTechnology">Công nghệ âm thanh</label>
+                            <input type="text" id="audioTechnology" name="audioTechnology" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="videoViewing">Xem video</label>
+                            <input type="text" id="videoViewing" name="videoViewing" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="category">Danh mục<span style="color: red;">*</span></label>
@@ -403,8 +418,8 @@
 
                                 return isValid;  // Ngăn chặn việc gửi form nếu có lỗi
                             }
-                            var colors = ["Xanh" , "Đỏ" , "Vàng"];
-                            var operatingSystems = ["Windows", "macOS", "Linux"];
+                            var colors = ["Xanh", "Đỏ", "Vàng","Đen","Xám"];
+                            var operatingSystems = ["Windows", "IOS", "Linux"];
                             var chips = ["Intel", "AMD", "ARM"];
                             var storages = ["32G","64G","128G","256G","521G","1T"];
                             var dimensionsAndWeights = ["150.9 x 75.7 x 8.3 mm  194g","144 x 71.4 x 8.1 mm  188g","158 x 77.8 x 8.1 mm  226g"];
@@ -461,22 +476,6 @@
                             }
 
                         </script>
-                        <div class="form-group">
-                            <label for="security">Bảo mật</label>
-                            <input type="text" id="security" name="security" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="networkConnectivity">Kết nối mạng</label>
-                            <input type="text" id="networkConnectivity" name="networkConnectivity" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="audioTechnology">Công nghệ âm thanh</label>
-                            <input type="text" id="audioTechnology" name="audioTechnology" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="videoViewing">Xem video</label>
-                            <input type="text" id="videoViewing" name="videoViewing" class="form-control">
-                        </div>
                         <div class="form-group">
                             <label for="charging">Sạc</label>
                             <input type="text" id="charging" name="charging" class="form-control">
@@ -578,7 +577,21 @@
     });
 
 </script>
+<script>
+    function formatNumberWithCommas(value) {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
+    document.getElementById('price').addEventListener('input', function (e) {
+        const value = e.target.value.replace(/,/g, '');
+        const numberValue = Number(value);
+        if (!isNaN(numberValue)) {
+            e.target.value = formatNumberWithCommas(numberValue);
+        } else {
+            e.target.value = value;
+        }
+    });
+</script>
 <script src="/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>

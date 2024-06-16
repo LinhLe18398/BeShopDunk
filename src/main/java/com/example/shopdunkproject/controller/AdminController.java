@@ -95,35 +95,40 @@ public class AdminController {
     }
 
     @PostMapping("/save")
-    public ModelAndView createProduct(@RequestParam(value = "name", required = false) String name,
-                                      @RequestParam(value = "quantity", required = false) int quantity,
-                                      @RequestParam(value = "price", required = false) double price,
-                                      @RequestParam(value = "file", required = false) MultipartFile imageFile,
-                                      @RequestParam(value = "description", required = false) String description,
-                                      @RequestParam(value = "discount", required = false) int discount,
-                                      @RequestParam(value = "category", required = false) long categoryId,
-                                      @RequestParam(value = "operatingSystem", required = false) String operatingSystem,
-                                      @RequestParam(value = "specialFeatures", required = false) String specialFeatures,
-                                      @RequestParam(value = "systemRequirements", required = false) String systemRequirements,
-                                      @RequestParam(value = "color", required = false) String color,
-                                      @RequestParam(value = "storage", required = false) String storage,
-                                      @RequestParam(value = "dimensionsAndWeight", required = false) String dimensionsAndWeight,
-                                      @RequestParam(value = "screen", required = false) String screen,
-                                      @RequestParam(value = "screenResolution", required = false) String screenResolution,
-                                      @RequestParam(value = "waterAndDustResistance", required = false) String waterAndDustResistance,
-                                      @RequestParam(value = "chip", required = false) String chip,
-                                      @RequestParam(value = "rearCamera", required = false) String rearCamera,
-                                      @RequestParam(value = "frontCamera", required = false) String frontCamera,
-                                      @RequestParam(value = "videoRecording", required = false) String videoRecording,
-                                      @RequestParam(value = "security", required = false) String security,
-                                      @RequestParam(value = "networkConnectivity", required = false) String networkConnectivity,
-                                      @RequestParam(value = "audioTechnology", required = false) String audioTechnology,
-                                      @RequestParam(value = "videoViewing", required = false) String videoViewing,
-                                      @RequestParam(value = "charging", required = false) String charging,
-                                      @RequestParam(value = "batteryAndPower", required = false) String batteryAndPower,
-                                      @RequestParam(value = "sensors", required = false) String sensors,
-                                      @RequestParam(value = "sim", required = false) String sim) throws IOException {
+    public ModelAndView createProduct(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "quantity", required = false) int quantity,
+            @RequestParam(value = "price", required = false) String formattedPrice,
+            @RequestParam(value = "file", required = false) MultipartFile imageFile,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "discount", required = false) int discount,
+            @RequestParam(value = "category", required = false) long categoryId,
+            @RequestParam(value = "operatingSystem", required = false) String operatingSystem,
+            @RequestParam(value = "specialFeatures", required = false) String specialFeatures,
+            @RequestParam(value = "systemRequirements", required = false) String systemRequirements,
+            @RequestParam(value = "color", required = false) String color,
+            @RequestParam(value = "storage", required = false) String storage,
+            @RequestParam(value = "dimensionsAndWeight", required = false) String dimensionsAndWeight,
+            @RequestParam(value = "screen", required = false) String screen,
+            @RequestParam(value = "screenResolution", required = false) String screenResolution,
+            @RequestParam(value = "waterAndDustResistance", required = false) String waterAndDustResistance,
+            @RequestParam(value = "chip", required = false) String chip,
+            @RequestParam(value = "rearCamera", required = false) String rearCamera,
+            @RequestParam(value = "frontCamera", required = false) String frontCamera,
+            @RequestParam(value = "videoRecording", required = false) String videoRecording,
+            @RequestParam(value = "security", required = false) String security,
+            @RequestParam(value = "networkConnectivity", required = false) String networkConnectivity,
+            @RequestParam(value = "audioTechnology", required = false) String audioTechnology,
+            @RequestParam(value = "videoViewing", required = false) String videoViewing,
+            @RequestParam(value = "charging", required = false) String charging,
+            @RequestParam(value = "batteryAndPower", required = false) String batteryAndPower,
+            @RequestParam(value = "sensors", required = false) String sensors,
+            @RequestParam(value = "sim", required = false) String sim) throws IOException {
+
         ModelAndView modelAndView = new ModelAndView("redirect:/products");
+
+        // Parse the formatted price to get the raw price
+        double price = Double.parseDouble(formattedPrice.replaceAll(",", ""));
 
         // Find category by ID
         Optional<Category> categoryOptional = iCategoryRepository.findById(categoryId);
@@ -168,10 +173,11 @@ public class AdminController {
         product.setProductDetail(productDTO);
         product.setImage(uploadImage(imageFile));
         iProductRepository.save(product);
-        modelAndView.addObject("successMessage", "Cập nhật sản phẩm thành công.");
-        modelAndView.setViewName("redirect:/products");
+
+        modelAndView.addObject("successMessage", "Tạo sản phẩm thành công");
         return modelAndView;
     }
+
 
     private String uploadImage(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
@@ -195,7 +201,7 @@ public class AdminController {
     public ModelAndView updateProduct(@PathVariable("id") long id,
                                       @RequestParam(value = "name", required = false) String name,
                                       @RequestParam(value = "quantity", required = false) int quantity,
-                                      @RequestParam(value = "price", required = false) double price,
+                                      @RequestParam(value = "price", required = false) String priceStr,
                                       @RequestParam(value = "file", required = false) MultipartFile imageFile,
                                       @RequestParam(value = "description", required = false) String description,
                                       @RequestParam(value = "discount", required = false) int discount,
@@ -262,10 +268,13 @@ public class AdminController {
 
         product.setName(name);
         product.setQuantity(quantity);
-        product.setPrice(price);
         product.setDescription(description);
         product.setDiscount(discount);
         product.setCategory(categoryOptional.get());
+
+        // Preprocess priceStr to remove commas
+        double price = Double.parseDouble(priceStr.replace(",", ""));
+        product.setPrice(price);
 
         if (!imageFile.isEmpty()) {
             product.setImage(uploadImage(imageFile));
@@ -277,6 +286,7 @@ public class AdminController {
     }
 
 
+
     @GetMapping("/update/{id}")
     public ModelAndView showUpdateForm(@PathVariable("id") long id) {
         ModelAndView modelAndView = new ModelAndView("update");
@@ -286,7 +296,7 @@ public class AdminController {
             modelAndView.addObject("product", product);
 
             modelAndView.addObject("colors", Arrays.asList("Xanh", "Đỏ", "Vàng"));
-            modelAndView.addObject("operatingSystem", Arrays.asList("Windows", "macOS", "Linux"));
+            modelAndView.addObject("operatingSystem", Arrays.asList("Windows", "IOS", "Linux"));
             modelAndView.addObject("chips", Arrays.asList("Intel", "AMD", "ARM"));
             modelAndView.addObject("storages", Arrays.asList("32G", "64G", "128G", "256G", "521G", "1T"));
             modelAndView.addObject("dimensionsAndWeights", Arrays.asList("", "150.9 x 75.7 x 8.3 mm  194g", "144 x 71.4 x 8.1 mm  188g", "158 x 77.8 x 8.1 mm  226g"));
