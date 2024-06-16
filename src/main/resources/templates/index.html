@@ -192,7 +192,7 @@
             <!-- SEARCH FORM -->
             <form class="form-inline ml-3" method="GET" th:action="@{/products/search}" onsubmit="return validateSearchForm()">
                 <div class="input-group input-group-sm">
-                    <input class="form-control form-control-navbar" type="search" name="name" placeholder="tìm kiếm tên"
+                    <input class="form-control form-control-navbar" type="search" name="name" placeholder="Tìm kiếm tên"
                            aria-label="Search" id="nameInput">
                     <select name="priceRange" class="form-control form-control-navbar ml-2" id="priceRange">
                         <option value="" th:selected="${priceRange == null}">Chọn giá</option>
@@ -204,7 +204,7 @@
                         <option value="above30" th:selected="${priceRange == 'above30'}">Trên 30 triệu</option>
                     </select>
                     <select name="sortType" class="form-control form-control-navbar ml-2">
-                        <option value="" th:selected="${sortType == null}">không sắp xếp</option>
+                        <option value="" th:selected="${sortType == null}">Không sắp xếp</option>
                         <option value="priceAsc" th:selected="${sortType == 'priceAsc'}">giá thấp đến cao</option>
                         <option value="priceDesc" th:selected="${sortType == 'priceDesc'}">giá cao đến thấp</option>
                     </select>
