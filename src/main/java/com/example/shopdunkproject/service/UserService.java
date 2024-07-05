@@ -11,6 +11,9 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    public Optional<User> findByUserName(String userName) {
+        return userRepository.findByUserName(userName);
+    }
 
     public String registerUser(User user) {
         System.out.println("Registering user: " + user);

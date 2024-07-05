@@ -33,14 +33,6 @@ public class Product {
     @OneToOne
     public ProductDetail productDetail;
 
-//    @Transient
-//    private String formattedPrice;
-//
-//    public String getFormattedPrice() {
-//        DecimalFormat df = new DecimalFormat("#.##");
-//        return df.format(price);
-//    }
-
     @Transient
     private String formattedPrice;
 

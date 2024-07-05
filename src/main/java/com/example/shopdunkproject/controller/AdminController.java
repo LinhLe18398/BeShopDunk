@@ -39,7 +39,7 @@ public class AdminController {
     @Autowired
     private IProductDetailRepository iProductDetailRepository;
 
-    public static String UPLOAD_DIRECTORY = "C:\\Users\\namca\\Downloads_Git\\DuAn_ShopDunk\\src\\main\\resources\\static\\image\\";
+    public static String UPLOAD_DIRECTORY = "/Users/lengoclinh/Desktop/BE-ShopDunk/src/main/resources/static/image/";
 
     private Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
 

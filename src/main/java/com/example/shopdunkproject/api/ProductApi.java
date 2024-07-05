@@ -1,14 +1,14 @@
 package com.example.shopdunkproject.api;
 
-import com.example.shopdunkproject.model.Cart;
-import com.example.shopdunkproject.model.Product;
-import com.example.shopdunkproject.model.ProductDTO;
-import com.example.shopdunkproject.model.User;
+import com.example.shopdunkproject.model.*;
+import com.example.shopdunkproject.repository.BillRepository;
 import com.example.shopdunkproject.repository.ICartRepository;
 import com.example.shopdunkproject.repository.IProductRepository;
 import com.example.shopdunkproject.repository.UserRepository;
 
+import com.example.shopdunkproject.service.CartService;
 import com.example.shopdunkproject.service.ProductService;
+import com.example.shopdunkproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +35,55 @@ public class ProductApi {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private BillRepository billRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private CartService cartService;
+
+    @PostMapping("/checkout/{username}")
+    public Bill checkout(@PathVariable String username) {
+        Optional<User> optionalUser = userService.findByUserName(username);
+
+        if (!optionalUser.isPresent()) {
+            throw new RuntimeException("User not found");
+        }
+
+        User user = optionalUser.get();
+        List<Cart> cartItems = cartService.findByUser(user);
+
+        if (cartItems.isEmpty()) {
+            throw new RuntimeException("Cart is empty");
+        }
+
+        List<BillItem> billItems = new ArrayList<>();
+        double totalAmount = 0;
+
+        for (Cart cartItem : cartItems) {
+            BillItem billItem = new BillItem(cartItem.getProduct(), cartItem.getQuantity());
+            billItems.add(billItem);
+            totalAmount += billItem.getPrice() * billItem.getQuantity();
+
+            // Trừ số lượng sản phẩm trong kho
+            Product product = cartItem.getProduct();
+            int newQuantity = product.getQuantity() - cartItem.getQuantity();
+            if (newQuantity < 0) {
+                throw new RuntimeException("Not enough stock for product: " + product.getName());
+            }
+            product.setQuantity(newQuantity);
+            iProductRepository.save(product);
+        }
+
+        Bill bill = new Bill();
+        bill.setUser(user);
+        bill.setBillItems(billItems);
+        bill.setTotalAmount(totalAmount);
+
+        cartService.deleteAll(cartItems);
+        return billRepository.save(bill);
+    }
 
 
 
