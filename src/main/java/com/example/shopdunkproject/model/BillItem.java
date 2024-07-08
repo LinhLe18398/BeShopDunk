@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.text.DecimalFormat;
+
 @Entity
 @Getter
 @Setter
@@ -26,5 +28,10 @@ public class BillItem {
     }
 
     public BillItem() {
+    }
+
+    public String getFormattedPrice() {
+        DecimalFormat df = new DecimalFormat("#,###");
+        return df.format(price);
     }
 }

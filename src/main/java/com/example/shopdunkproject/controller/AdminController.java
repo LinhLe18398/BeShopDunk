@@ -4,13 +4,12 @@ import com.example.shopdunkproject.model.*;
 import com.example.shopdunkproject.repository.ICategoryRepository;
 import com.example.shopdunkproject.repository.IProductDetailRepository;
 import com.example.shopdunkproject.repository.IProductRepository;
+import com.example.shopdunkproject.service.IBillService;
 import com.example.shopdunkproject.service.ICategoryService;
 import com.example.shopdunkproject.service.IProductService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,8 +37,10 @@ public class AdminController {
     private ICategoryService iCategoryService;
     @Autowired
     private IProductDetailRepository iProductDetailRepository;
+    @Autowired
+    private IBillService iBillService;
 
-    public static String UPLOAD_DIRECTORY = "/Users/lengoclinh/Desktop/BE-ShopDunk/src/main/resources/static/image/";
+    public static String UPLOAD_DIRECTORY = "C:\\Users\\namca\\Documents\\BeShopDunk\\src\\main\\resources\\static\\image\\";
 
     private Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
 
@@ -400,4 +401,30 @@ public class AdminController {
             return modelAndView;
         }
 
+
+
+    // Cập nhật phương thức showAllBills
+    @GetMapping("/bills")
+    public ModelAndView showAllBills(@PageableDefault(size = 5, sort = "orderDate", direction = org.springframework.data.domain.Sort.Direction.DESC) Pageable pageable) {
+        ModelAndView modelAndView = new ModelAndView("bills");
+        Page<Bill> billPage = iBillService.getAllBills(pageable);
+        modelAndView.addObject("listBill", billPage);
+        return modelAndView;
     }
+
+    @GetMapping("/bills/{id}")
+    public ModelAndView showBillDetail(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("bill-detail");
+        Bill bill = iBillService.getBillById(id);
+        if (bill != null) {
+            modelAndView.addObject("bill", bill);
+            modelAndView.addObject("billItems", bill.getBillItems());
+        } else {
+            modelAndView.setViewName("redirect:/bills");
+            modelAndView.addObject("error", "Hóa đơn không tồn tại.");
+        }
+        return modelAndView;
+    }
+
+
+}

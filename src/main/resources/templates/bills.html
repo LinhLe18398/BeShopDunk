@@ -153,7 +153,7 @@
         }
 
         .navbar-nav {
-            padding-right: 400px;
+            padding-right: 350px;
         }
 
         .phantrang {
@@ -199,31 +199,30 @@
                 </li>
             </ul>
             <!-- SEARCH FORM -->
-            <form class="form-inline ml-3" method="GET" th:action="@{/products/search}" onsubmit="return validateSearchForm()">
+            <form class="form-inline ml-3" method="GET" th:action="@{products/bills/search}" onsubmit="return validateSearchBillForm()">
                 <div class="input-group input-group-sm">
-                    <input class="form-control form-control-navbar" type="search" name="name" placeholder="Tìm kiếm tên"
-                           aria-label="Search" id="nameInput" th:value="${name}">
-                    <select name="priceRange" class="form-control form-control-navbar ml-2" id="priceRange">
-                        <option value="" th:selected="${priceRange == null}">Chọn giá</option>
-                        <option value="below5" th:selected="${priceRange == 'below5'}">Dưới 5 triệu</option>
-                        <option value="5to10" th:selected="${priceRange == '5to10'}">5 - 10 triệu</option>
-                        <option value="10to15" th:selected="${priceRange == '10to15'}">10 - 15 triệu</option>
-                        <option value="15to20" th:selected="${priceRange == '15to20'}">15 - 20 triệu</option>
-                        <option value="20to30" th:selected="${priceRange == '20to30'}">20 - 30 triệu</option>
-                        <option value="above30" th:selected="${priceRange == 'above30'}">Trên 30 triệu</option>
-                    </select>
-                    <select name="sortType" class="form-control form-control-navbar ml-2">
-                        <option value="" th:selected="${sortType == null}">Không sắp xếp</option>
-                        <option value="priceAsc" th:selected="${sortType == 'priceAsc'}">giá thấp đến cao</option>
-                        <option value="priceDesc" th:selected="${sortType == 'priceDesc'}">giá cao đến thấp</option>
-                    </select>
-                </div>
-                <div class="input-group-append">
-                    <button class="btn btn-navbar" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
+                    <!-- Tìm kiếm theo tên khách hàng -->
+                    <input class="form-control form-control-navbar mr-2" type="text" name="userName" placeholder="Tên khách hàng"
+                           aria-label="User Name" th:value="${userName}">
+
+                    <!-- Tìm kiếm theo ngày đặt hàng -->
+                    <input class="form-control form-control-navbar mr-2" type="date" name="orderDate" placeholder="Ngày đặt hàng"
+                           aria-label="Order Date" id="orderDateInput" th:value="${orderDate}">
+
+                    <!-- Tìm kiếm theo tổng tiền gần đúng -->
+                    <input class="form-control form-control-navbar" type="text" name="totalAmount" placeholder="Tổng tiền gần đúng"
+                           aria-label="Total Amount" id="totalAmountInput" th:value="${totalAmount}">
+
+                    <!-- Nút tìm kiếm -->
+                    <div class="input-group-append ml-2">
+                        <button class="btn btn-navbar btn-primary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
                 </div>
             </form>
+
+
         </nav>
     </div>
     <!-- /.navbar -->
@@ -238,80 +237,46 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
+                    <h2 class="text-center mb-4">Lịch Sử Hóa Đơn</h2>
                     <div class="panel">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="float-sm-right">
-                                        <a th:href="@{/products/create}" class="btn btn-primary">
-                                            <i class="fa fa-user"></i>
-                                            Thêm Sản Phẩm</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="panel-body table-responsive">
                             <table class="table">
                                 <thead class="thead_table">
                                 <tr>
-                                    <th>Ảnh</th>
-                                    <th>Tên</th>
-                                    <th>Giá</th>
-                                    <th>Mô tả</th>
-                                    <th>Hành Động</th>
+                                    <th>Người dùng</th>
+                                    <th>Ngày đặt hàng</th>
+                                    <th>Tổng số tiền</th>
+                                    <th>Chi tiết</th>
                                 </tr>
                                 </thead>
-                                <div class=" ml-3 error-message" th:if="${message}" th:text="${message}"></div>
                                 <tbody>
-                                <tr th:each="product : ${listProduct.content}">
-                                    <td>
-                                        <a th:href="@{/products/view/{id}(id=${product.id})}">
-                                            <img style="object-fit: contain;" width="100px" height="100px"
-                                                 th:src="@{'/image/' + ${product.image}}" alt="">
-                                        </a>
-                                    </td>
-                                    <td th:text="${product.name}"></td>
-                                    <td th:text="${product.formattedPrice} + đ"></td>
-                                    <td th:text="${product.description}"></td>
-                                    <td>
-                                        <ul class="action-list">
-                                            <li>
-                                                <a style="color: red"
-                                                   th:href="@{/products/delete/{id}(id=${product.id})}" class="btn"
-                                                   onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                                                    <i class="fa fa-trash"></i>
-                                                </a>
-                                            </li>
-                                            <li><a style="color:grey;"
-                                                   th:href="@{/products/update/{id}(id=${product.id})}" class="btn">
-                                                <em class="fa fa-edit"></em>
-                                            </a></li>
-                                        </ul>
-                                    </td>
+                                <tr th:each="bill : ${listBill.content}">
+                                    <td th:text="${bill.user.userName}"></td>
+                                    <td th:text="${#dates.format(bill.orderDate, 'dd/MM/yyyy')}"></td>
+                                    <td th:text="${bill.formattedTotalAmount}+đ"></td>
+                                    <td><a th:href="@{/products/bills/{id}(id=${bill.id})}">Xem chi tiết</a></td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                         <!-- Pagination -->
-
                         <div class="phantrang d-flex justify-content-center mt-4">
-                            <a class="btn btn-secondary mr-2" th:if="${listProduct.hasPrevious()}"
-                               th:href="@{/products/search(page=${listProduct.number - 1}, name=${name}, price=${price}, sortType=${sortType})}">Trước</a>
-                            <div th:each="page : ${#numbers.sequence(0, listProduct.totalPages - 1)}">
+                            <a class="btn btn-secondary mr-2" th:if="${listBill.hasPrevious()}"
+                               th:href="@{/bills(page=${listBill.number - 1})}">Trước</a>
+                            <div th:each="page : ${#numbers.sequence(0, listBill.totalPages - 1)}">
                                 <a class="btn mx-1"
-                                   th:href="@{/products/search(page=${page}, name=${name}, price=${price}, sortType=${sortType})}"
+                                   th:href="@{/bills(page=${page})}"
                                    th:text="${page + 1}"
-                                   th:classappend="${page == listProduct.number} ? 'btn-primary' : 'btn-secondary'"></a>
+                                   th:classappend="${page == listBill.number} ? 'btn-primary' : 'btn-secondary'"></a>
                             </div>
-                            <a class="btn btn-secondary ml-2" th:if="${listProduct.hasNext()}"
-                               th:href="@{/products/search(page=${listProduct.number + 1}, name=${name}, price=${price}, sortType=${sortType})}">Sau</a>
+                            <a class="btn btn-secondary ml-2" th:if="${listBill.hasNext()}"
+                               th:href="@{/bills(page=${listBill.number + 1})}">Sau</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- /.content -->
 </div>
 <script>
     // Đợi 5 giây sau khi trang đã tải xong
